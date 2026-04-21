@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const VALID_SECTION_IDS = [
@@ -18,7 +18,7 @@ const VALID_SECTION_IDS = [
   "previous-mcprs",
 ];
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [language, setLanguage] = useState<"en" | "es">("en");
@@ -890,5 +890,13 @@ export default function Home() {
 
       <footer className="credit">Desing and made by Blak</footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
   );
 }
