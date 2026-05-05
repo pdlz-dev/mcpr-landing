@@ -347,7 +347,7 @@ Durante la sesión práctica, los participantes podrán:`,
   ];
 
   const psmDates = [
-    { date: "April 27th, 2026", label: "Deadline for submission" },
+    { date: "May 17th, 2026", label: "Deadline for submission" },
     { date: "June 1st, 2026", label: "Notification of acceptance" },
     { date: "June 10th, 2026", label: "Camera Ready" },
     { date: "June 24th-27th, 2026", label: "Postgraduate Students&apos; meeting" },
@@ -701,8 +701,11 @@ Durante la sesión práctica, los participantes podrán:`,
             <li>Results achieved and their validity</li>
           </ul>
           <p>
-            Papers must be elaborated based on formatting instructions and sent in
-            PDF format to mcpr2026psm@inaoep.mx. Accepted papers are expected to be
+            Papers must be elaborated based on{" "}
+            <a href="/docs/LNCS-Word-Templates.zip" download>Word Template</a>
+            {" or "}
+            <a href="/docs/LaTeX2e+Proceedings.zip" download>LaTeX Template</a>
+            {" "}and sent in PDF format to mcpr2026psm@inaoep.mx. Accepted papers are expected to be
             published in Research in Computing Science (ISSN: 1870-4069) and will
             be presented at the conference as a poster.
           </p>
