@@ -702,9 +702,9 @@ Durante la sesión práctica, los participantes podrán:`,
           </ul>
           <p>
             Papers must be elaborated based on{" "}
-            <a href="/docs/LNCS-Word-Templates.zip" download>Word Template</a>
+            <a href="docs/LNCS-Word-Templates.zip" download>Word Template</a>
             {" or "}
-            <a href="/docs/LaTeX2e+Proceedings.zip" download>LaTeX Template</a>
+            <a href="docs/LaTeX2e%2BProceedings.zip" download>LaTeX Template</a>
             {" "}and sent in PDF format to mcpr2026psm@inaoep.mx. Accepted papers are expected to be
             published in Research in Computing Science (ISSN: 1870-4069) and will
             be presented at the conference as a poster.
