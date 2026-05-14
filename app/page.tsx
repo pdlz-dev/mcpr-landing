@@ -19,15 +19,22 @@ const VALID_SECTION_IDS = [
   "conference-venue",
   "contact",
   "registration",
+  "program",
   "tutorials",
+  "panels",
 ];
 
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [language, setLanguage] = useState<"en" | "es">("en");
-  const [isProgramMenuOpen, setIsProgramMenuOpen] = useState(false);
   const [isPreviousMenuOpen, setIsPreviousMenuOpen] = useState(false);
+  const [expandedProgramDays, setExpandedProgramDays] = useState<{ [key: string]: boolean }>({
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+  });
   const tr = (en: string, es: string) => (language === "es" ? es : en);
 
   const tabParam = searchParams.get("tab");
@@ -51,11 +58,107 @@ function HomeContent() {
     router.replace(`?${params.toString()}`, { scroll: false });
   }, [router, searchParams, tabParam]);
 
-  const programLinksPerDay = [
-    { en: "Wednesday June 24", es: "Miercoles 24 de junio", href: "#" },
-    { en: "Thursday June 25", es: "Jueves 25 de junio", href: "#" },
-    { en: "Friday June 26", es: "Viernes 26 de junio", href: "#" },
+  const conferenceProgramByDay = [
+    {
+      id: "wednesday",
+      day: { en: "Wednesday, June 24", es: "Miercoles, 24 de junio" },
+      schedule: [
+        { time: "9:00 - 9:20", en: "Opening Ceremony", es: "Ceremonia de apertura" },
+        { time: "9:20 - 10:20", en: "Keynote Address: New Paradigms in Sensors and Computer Vision Methods + Comments on Artificial Intelligence Production at an International Scale (Prof. Walterio Mayol-Cuevas)", es: "Conferencia magistral: New Paradigms in Sensors and Computer Vision Methods + Comments on Artificial Intelligence Production at an International Scale (Prof. Walterio Mayol-Cuevas)" },
+        { time: "10:20 - 10:40", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 1: Pattern Recognition and Machine Learning Techniques", es: "Sesion 1: Tecnicas de reconocimiento de patrones y aprendizaje automatico" },
+        { time: "10:40 - 11:00", en: "Evaluation of Clustering and Consensus Models for Classifying Adulterant Levels in Alcoholic Beverages Using Single-Shot Interferograms", es: "Evaluation of Clustering and Consensus Models for Classifying Adulterant Levels in Alcoholic Beverages Using Single-Shot Interferograms" },
+        { time: "11:00 - 11:20", en: "Beyond Pareto: A High-Efficiency Approach to Bi-Objective Regression Trees", es: "Beyond Pareto: A High-Efficiency Approach to Bi-Objective Regression Trees" },
+        { time: "11:20 - 11:40", en: "Ensembles of Manifold Learners for Supervised and Unsupervised Learning", es: "Ensembles of Manifold Learners for Supervised and Unsupervised Learning" },
+        { time: "11:40 - 12:00", en: "Application of Unsupervised Pattern Recognition for the Structural Characterization of Masonry Walls", es: "Application of Unsupervised Pattern Recognition for the Structural Characterization of Masonry Walls" },
+        { time: "12:00 - 12:20", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 2: Pattern Recognition and Machine Learning Techniques", es: "Sesion 2: Tecnicas de reconocimiento de patrones y aprendizaje automatico" },
+        { time: "12:20 - 12:40", en: "Clustering Algorithms for Density Variations: An Empirical Comparison", es: "Clustering Algorithms for Density Variations: An Empirical Comparison" },
+        { time: "12:40 - 13:00", en: "Dissimilarity-Based Graph Embedding via Local and Global Approximate Graph Patterns", es: "Dissimilarity-Based Graph Embedding via Local and Global Approximate Graph Patterns" },
+        { time: "13:00 - 13:20", en: "Comprehensive Validation of Brex Sequential Classifier Model for Robust Pattern Recognition", es: "Comprehensive Validation of Brex Sequential Classifier Model for Robust Pattern Recognition" },
+        { time: "13:20 - 13:40", en: "A Machine Learning Framework for High-Performance Electrolyte Classification in Lithium Metal Batteries", es: "A Machine Learning Framework for High-Performance Electrolyte Classification in Lithium Metal Batteries" },
+        { time: "13:40 - 14:00", en: "Dynamic Assessment of Landslide Susceptibility at Pico de Orizaba Using Ensemble Classifiers and Multitemporal Analysis", es: "Dynamic Assessment of Landslide Susceptibility at Pico de Orizaba Using Ensemble Classifiers and Multitemporal Analysis" },
+        { time: "14:00 - 15:00", en: "Lunch", es: "Comida" },
+        { time: "", en: "Session 3: Deep Learning and Neural Networks", es: "Sesion 3: Deep learning y redes neuronales" },
+        { time: "15:00 - 15:20", en: "Banking Fraud Detection Using Neural Network Models", es: "Banking Fraud Detection Using Neural Network Models" },
+        { time: "15:20 - 15:40", en: "Variational Standard Simplex Hierarchical Encoder for Clustering", es: "Variational Standard Simplex Hierarchical Encoder for Clustering" },
+        { time: "15:40 - 16:00", en: "Chest CT Gender Domain Translation: Comparative Evaluation of CycleGAN and cVAE in Radiometric and Volumetric Coherence", es: "Chest CT Gender Domain Translation: Comparative Evaluation of CycleGAN and cVAE in Radiometric and Volumetric Coherence" },
+        { time: "16:00 - 16:20", en: "Detection of Dangerous Wildlife in a Dynamic Environment Using Deep Learning", es: "Detection of Dangerous Wildlife in a Dynamic Environment Using Deep Learning" },
+        { time: "16:20 - 16:40", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 4: Deep Learning and Neural Networks / Pattern Recognition and Machine Learning Techniques", es: "Sesion 4: Deep learning y redes neuronales / reconocimiento de patrones y aprendizaje automatico" },
+        { time: "16:40 - 17:00", en: "Spatiotemporal Prediction of Wildfires Spread Using Deep Learning", es: "Spatiotemporal Prediction of Wildfires Spread Using Deep Learning" },
+        { time: "17:00 - 17:20", en: "A Safety-Aware Approach for Automated Urine Culture Screening Using Calibrated Deep Learning", es: "A Safety-Aware Approach for Automated Urine Culture Screening Using Calibrated Deep Learning" },
+        { time: "17:20 - 17:40", en: "Modeling Tumor Progression in Mammography with Conditional Generative Adversarial Networks", es: "Modeling Tumor Progression in Mammography with Conditional Generative Adversarial Networks" },
+        { time: "17:40 - 18:00", en: "Customer Preferences Recognition in Neuromarketing: Improving Accuracy with Autoregressive Modeling, Genetic Algorithms, and Naive Bayes", es: "Customer Preferences Recognition in Neuromarketing: Improving Accuracy with Autoregressive Modeling, Genetic Algorithms, and Naive Bayes" },
+      ],
+    },
+    {
+      id: "thursday",
+      day: { en: "Thursday, June 25", es: "Jueves, 25 de junio" },
+      schedule: [
+        { time: "9:00 - 10:00", en: "Panel in Spanish: Las Voces del Manana - Ninos Genio Debaten sobre Inteligencia Artificial", es: "Panel en espanol: Las Voces del Manana - Ninos Genio Debaten sobre Inteligencia Artificial" },
+        { time: "10:00 - 10:20", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 5: Medical Applications of Pattern Recognition", es: "Sesion 5: Aplicaciones medicas del reconocimiento de patrones" },
+        { time: "10:20 - 10:40", en: "Machine Learning Algorithms for Identifying Attention-Deficit/Hyperactivity Disorder Processing Electroencephalographic Signals", es: "Machine Learning Algorithms for Identifying Attention-Deficit/Hyperactivity Disorder Processing Electroencephalographic Signals" },
+        { time: "10:40 - 11:00", en: "Graph-Based Modeling of Disfluent Speech for Alzheimer Detection", es: "Graph-Based Modeling of Disfluent Speech for Alzheimer Detection" },
+        { time: "11:00 - 11:20", en: "Factors Associated with Depression in Mexico: An XAI Comparative Analysis of Tree-Based Classifiers Under Imbalanced Data", es: "Factors Associated with Depression in Mexico: An XAI Comparative Analysis of Tree-Based Classifiers Under Imbalanced Data" },
+        { time: "11:20 - 11:40", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 6: Medical Applications of Pattern Recognition / Computer Vision", es: "Sesion 6: Aplicaciones medicas del reconocimiento de patrones / vision por computadora" },
+        { time: "11:40 - 12:00", en: "Hierarchical Incremental Learning for Adaptive Breast Thermography Classification", es: "Hierarchical Incremental Learning for Adaptive Breast Thermography Classification" },
+        { time: "12:00 - 12:20", en: "Automatic Classification of Subcutaneous Mycoses in Clinical Images Using Transfer Learning", es: "Automatic Classification of Subcutaneous Mycoses in Clinical Images Using Transfer Learning" },
+        { time: "12:20 - 12:40", en: "Upsampling of Sparse Three-Dimensional Point Clouds Using iFactor-KDtree with Adaptive Interpolation", es: "Upsampling of Sparse Three-Dimensional Point Clouds Using iFactor-KDtree with Adaptive Interpolation" },
+        { time: "12:40 - 13:00", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "13:00 - 14:00", en: "Keynote Address: Foundation Models for Microscopy and Medical Data Analysis (Prof. Erik Rodner)", es: "Conferencia magistral: Foundation Models for Microscopy and Medical Data Analysis (Prof. Erik Rodner)" },
+        { time: "14:00 - 15:00", en: "Lunch", es: "Comida" },
+        { time: "", en: "Session 7: Language Processing and Recognition", es: "Sesion 7: Procesamiento y reconocimiento de lenguaje" },
+        { time: "15:00 - 15:20", en: "A Two-Stage Textual Preprocessing Pipeline for Medical Image Captioning", es: "A Two-Stage Textual Preprocessing Pipeline for Medical Image Captioning" },
+        { time: "15:20 - 15:40", en: "Semantic Pattern Recognition in Scientific Literature Using Hybrid Topic Modeling and SciBERT With LoRA-Based Validation", es: "Semantic Pattern Recognition in Scientific Literature Using Hybrid Topic Modeling and SciBERT With LoRA-Based Validation" },
+        { time: "15:40 - 16:00", en: "Automatic Depressive Symptom Detection on Social Media Using the BDI-II", es: "Automatic Depressive Symptom Detection on Social Media Using the BDI-II" },
+        { time: "16:00 - 16:20", en: "Statistical Analysis of Combined Adversarial Attacks on Spam Detection Models", es: "Statistical Analysis of Combined Adversarial Attacks on Spam Detection Models" },
+        { time: "16:20 - 16:40", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 8: Language Processing and Recognition / Computer Vision", es: "Sesion 8: Procesamiento y reconocimiento de lenguaje / vision por computadora" },
+        { time: "16:40 - 17:00", en: "InCvT: A Hybrid Inception-Convolutional Vision Transformer Architecture for Speech Emotion Recognition", es: "InCvT: A Hybrid Inception-Convolutional Vision Transformer Architecture for Speech Emotion Recognition" },
+        { time: "17:20 - 17:40", en: "Comparative Statistical Analysis of Sentiment Models in Spanish Political Discourse on YouTube", es: "Comparative Statistical Analysis of Sentiment Models in Spanish Political Discourse on YouTube" },
+        { time: "17:40 - 18:00", en: "VAR Based on Knowledge Transfer from VLMs and Video Descriptions", es: "VAR Based on Knowledge Transfer from VLMs and Video Descriptions" },
+        { time: "20:00 - 23:00", en: "Conference Dinner (Salon ARGOS del Centro de Convenciones Cibeles)", es: "Cena de conferencia (Salon ARGOS del Centro de Convenciones Cibeles)" },
+      ],
+    },
+    {
+      id: "friday",
+      day: { en: "Friday, June 26", es: "Viernes, 26 de junio" },
+      schedule: [
+        { time: "9:00 - 10:00", en: "Keynote Address: Quantum Computing: Foundations, Transition to Industry, and Applications in Pattern Recognition (Prof. Dr. Salvador E. Venegas-Andraca)", es: "Conferencia magistral: Quantum Computing: Foundations, Transition to Industry, and Applications in Pattern Recognition (Prof. Dr. Salvador E. Venegas-Andraca)" },
+        { time: "10:00 - 10:10", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "10:10 - 11:25", en: "Panel in Spanish: Tecnologia con Proposito - Academia, Industria y Gobierno Dialogan sobre Inteligencia Artificial", es: "Panel en espanol: Tecnologia con Proposito - Academia, Industria y Gobierno Dialogan sobre Inteligencia Artificial" },
+        { time: "11:25 - 11:40", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "", en: "Session 9: Computer Vision", es: "Sesion 9: Vision por computadora" },
+        { time: "11:40 - 12:00", en: "Embedded System for Vehicle Environment Perception and License Plate Recognition (LPR) Using Computer Vision and Deep Learning", es: "Embedded System for Vehicle Environment Perception and License Plate Recognition (LPR) Using Computer Vision and Deep Learning" },
+        { time: "12:00 - 12:20", en: "Interpretable Human Activity Recognition for Subtle Robbery Detection in Surveillance Videos", es: "Interpretable Human Activity Recognition for Subtle Robbery Detection in Surveillance Videos" },
+        { time: "12:20 - 12:40", en: "Tree Crown Segmentation in UAV RGB Images via Monocular Depth Estimation", es: "Tree Crown Segmentation in UAV RGB Images via Monocular Depth Estimation" },
+        { time: "12:40 - 13:00", en: "UAV Pose Estimation in Low-Light Conditions Using Visual-LiDar Fusion", es: "UAV Pose Estimation in Low-Light Conditions Using Visual-LiDar Fusion" },
+        { time: "13:00 - 13:30", en: "Closing Ceremony", es: "Ceremonia de clausura" },
+        { time: "13:30 - 15:00", en: "Lunch", es: "Comida" },
+      ],
+    },
+    {
+      id: "saturday",
+      day: { en: "Saturday, June 27", es: "Sabado, 27 de junio" },
+      schedule: [
+        { time: "8:30 - 9:00", en: "Registration", es: "Registro" },
+        { time: "9:00 - 11:30", en: "Tutorial 1: Understanding Modern NLP Techniques (Prof. Humberto de Jesus Ochoa Dominguez) | Tutorial 2: Neuromorphic Computing for Edge AI (Prof. Victor Hugo Ponce Ponce) | Tutorial 3: Robot Modeling and Control (Prof. Elsa Rubio Espino)", es: "Tutorial 1: Understanding Modern NLP Techniques (Prof. Humberto de Jesus Ochoa Dominguez) | Tutorial 2: Neuromorphic Computing for Edge AI (Prof. Victor Hugo Ponce Ponce) | Tutorial 3: Robot Modeling and Control (Prof. Elsa Rubio Espino)" },
+        { time: "11:30 - 11:45", en: "Coffee Break", es: "Receso de cafe" },
+        { time: "11:45 - 13:30", en: "Tutorial continuation sessions", es: "Continuacion de sesiones de tutorial" },
+        { time: "13:30 - 14:50", en: "Lunch", es: "Comida" },
+      ],
+    },
   ];
+
+  const programLinksPerDay = conferenceProgramByDay.map((day) => ({
+    id: day.id,
+    en: day.day.en,
+    es: day.day.es,
+    href: `#program-day-${day.id}`,
+  }));
 
   const tutorials = [
   {
@@ -130,7 +233,102 @@ Durante la sesión práctica, los participantes podrán:`,
       es: `El taller busca cerrar la brecha entre la inteligencia artificial y la microelectrónica, proporcionando a los participantes una experiencia práctica inicial en el diseño de hardware neuromórfico analógico.`,
     },
   },
+  {
+    name: "Prof. Elsa Rubio Espino",
+    image: "./people/elsa_rubio.jpeg",
+    title: {
+      en: "Robot Modeling and Control",
+      es: "Modelado y control de robots",
+    },
+    description: {
+      en: `This tutorial, presented by Prof. Elsa Rubio Espino from the Centro de Investigacion en Computacion of the Instituto Politecnico Nacional (CDMX, Mexico), aims to introduce participants to the fundamental principles of mobile robot modeling and control from both theoretical and applied perspectives.
+
+The first part will cover general concepts of mathematical modeling using differential equations, which enable the description of the dynamic behavior of robotic systems in real-world environments.
+
+Then, various control strategies used in mobile robotics will be presented, including classical approaches, fuzzy logic-based techniques, and optimal control methods.`,
+      es: `Este tutorial, impartido por la Prof. Elsa Rubio Espino del Centro de Investigacion en Computacion del Instituto Politecnico Nacional (CDMX, Mexico), tiene como objetivo introducir a los participantes en los principios fundamentales del modelado y control de robots moviles, desde perspectivas tanto teoricas como aplicadas.
+
+La primera parte abordara conceptos generales de modelado matematico mediante ecuaciones diferenciales, que permiten describir el comportamiento dinamico de sistemas roboticos en entornos reales.
+
+Despues, se presentaran diversas estrategias de control utilizadas en robotica movil, incluyendo enfoques clasicos, tecnicas basadas en logica difusa y metodos de control optimo.`,
+    },
+    topics: [
+      {
+        en: "Fundamentals and applications will be discussed in general terms, emphasizing their relevance for navigation problems.",
+        es: "Se discutiran fundamentos y aplicaciones en terminos generales, resaltando su relevancia para resolver problemas de navegacion.",
+      },
+      {
+        en: "The tutorial highlights how control methods support stability in mobile robotic systems.",
+        es: "El tutorial destaca como los metodos de control contribuyen a la estabilidad en sistemas roboticos moviles.",
+      },
+      {
+        en: "Trajectory-tracking challenges are addressed by connecting modeling with control strategy design.",
+        es: "Se abordan desafios de seguimiento de trayectoria al conectar el modelado con el diseno de estrategias de control.",
+      },
+    ],
+    closing: {
+      en: `The tutorial is geared toward students, researchers, and professionals interested in robotics, dynamic systems, and control, and provides a comprehensive overview that connects mathematical modeling with the design of control strategies for mobile systems.`,
+      es: `El tutorial esta dirigido a estudiantes, investigadores y profesionistas interesados en robotica, sistemas dinamicos y control, y ofrece una vision integral que conecta el modelado matematico con el diseno de estrategias de control para sistemas moviles.`,
+    },
+  },
 ];
+
+  const panels = [
+    {
+      name: "Luis Eduardo Villarreal Vázquez",
+      image: "./people/luis_villareal.jpeg",
+      title: {
+        en: "Robotics for Young Innovators: Building Champions in STEM",
+        es: "Robótica para Jóvenes Innovadores: Formando Campeones en STEM",
+      },
+      role: {
+        en: "International Robotics Champion & Student-Instructor, Mech Robotix",
+        es: "Campeón Internacional de Robótica & Instructor-Estudiante, Mech Robotix",
+      },
+      description: {
+        en: `At just 13 years old and in 8th grade, Luis Eduardo Villarreal Vázquez is an international robotics champion and award-winning STEM instructor. He represents an inspiring example of how young people can achieve extraordinary results in science and technology competitions.
+
+Luis has represented his city, state, and Mexico in various robotics, science, and technology competitions since the age of 8. He is an international robotics champion in several Robojam competition categories, having participated in competitions in Mexico, Colombia, USA, Europe, and Asia. He holds a world record in the RoboSketch category since 2022 and was named Roboticist of the Year 2022 by Robojam International.
+
+His award-winning projects include "Ecoalebrijes Robóticos" (earning a bronze medal at Infomatrix Solacyt 2022), "BullyGuard MIA: Combating Bullying with Artificial Intelligence" (gold medal at state level, bronze at Ibero-American level, and registered with INDAUTOR), and "3D Chickens Live: Where technology can create life" (gold medal at Infomatrix Solacyt Chihuahua 2026).
+
+Luis was named Best Roboticist of Mexico 2023 by The Valerio Foundation and is selected as one of UNICEF Mexico's "Youth Who Inspire 2025."`,
+        es: `Con solo 13 años de edad y cursando 8º grado, Luis Eduardo Villarreal Vázquez es un campeón internacional de robótica e instructor galardonado en STEM. Representa un ejemplo inspirador de cómo los jóvenes pueden lograr resultados extraordinarios en competencias de ciencia y tecnología.
+
+Luis ha representado su ciudad, estado y México en varias competencias de robótica, ciencia y tecnología desde los 8 años. Es campeón internacional de robótica en varias categorías de competencias Robojam, habiendo participado en competencias en México, Colombia, USA, Europa y Asia. Ostenta un récord mundial en la categoría RoboSketch desde 2022 y fue nombrado Roboticista del Año 2022 por Robojam International.
+
+Sus proyectos galardonados incluyen "Ecoalebrijes Robóticos" (medalla de bronce en Infomatrix Solacyt 2022), "BullyGuard MIA: Combatiendo el Bullying con Inteligencia Artificial" (medalla de oro a nivel estatal, bronce a nivel iberoamericano, y registrado con INDAUTOR), y "3D Chickens Live: Where technology can create life" (medalla de oro en Infomatrix Solacyt Chihuahua 2026).
+
+Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y está seleccionado como uno de los "Youth Who Inspire 2025" de UNICEF México.`,
+      },
+      highlights: [
+        {
+          en: "International Robotics Champion in multiple Robojam categories",
+          es: "Campeón Internacional de Robótica en múltiples categorías Robojam",
+        },
+        {
+          en: "World Record holder in RoboSketch category (2022-present)",
+          es: "Poseedor de Récord Mundial en categoría RoboSketch (2022-presente)",
+        },
+        {
+          en: "Roboticist of the Year 2022 - Robojam International",
+          es: "Roboticista del Año 2022 - Robojam International",
+        },
+        {
+          en: "Best Roboticist of Mexico 2023 - The Valerio Foundation",
+          es: "Mejor Roboticista de México 2023 - The Valerio Foundation",
+        },
+        {
+          en: "NASA Space Apps Challenge 2024 Global Nomination - Supernova Family Team",
+          es: "Nominación Global NASA Space Apps Challenge 2024 - Equipo Supernova Family",
+        },
+        {
+          en: "UNICEF Mexico's Youth Who Inspire 2025",
+          es: "Youth Who Inspire 2025 de UNICEF México",
+        },
+      ],
+    },
+  ];
 
   const navItems = [
     { id: "home", label: { en: "Home", es: "Inicio" } },
@@ -262,10 +460,10 @@ Durante la sesión práctica, los participantes podrán:`,
         en: "Quantum Computing: Foundations, Transition to Industry and Applications in Pattern Recognition",
         es: "Computación cuántica: fundamentos, transición hacia la industria y aplicaciones en reconocimiento de patrones",
       },
-      name: "Prof. Dr. Salvador Venegas",
+      name: "Prof. Dr. Salvador E. Venegas-Andraca",
       affiliation: {
-        en: "Instituto Tecnologico de Estudios Superiores de Monterrey (ITESM), Campus Ciudad de Mexico",
-        es: "Instituto Tecnológico de Estudios Superiores de Monterrey (ITESM), Campus Ciudad de México",
+        en: "Tecnologico de de Monterrey, Campus Ciudad de Mexico",
+        es: "Tecnologico de de Monterrey, Campus Ciudad de Mexico",
       },
       initials: "SV",
       image: "./people/salvador_elias.jpg",
@@ -560,6 +758,195 @@ Durante la sesión práctica, los participantes podrán:`,
             ))}
           </div>
         </section>
+      );
+    }
+
+    if (activeSection === "panels") {
+      return (
+        <section className="panels-section">
+          <header className="panels-header">
+            <p>{tr("MCPR 2026 Panels", "Paneles MCPR 2026")}</p>
+            <h2>{tr("Panelists MCPR 2026", "Panelistas MCPR 2026")}</h2>
+          </header>
+
+          <div className="panels-list">
+            {panels.map((panel) => (
+              <article key={panel.name} className="surface panel-card">
+                <aside className="panel-speaker">
+                  <div className="panel-photo-wrap">
+                    <Image
+                      src={panel.image}
+                      alt={panel.name}
+                      width={240}
+                      height={240}
+                      className="panel-photo"
+                    />
+                  </div>
+                  <h3>{panel.name}</h3>
+                  <p className="panel-role">{panel.role[language]}</p>
+                </aside>
+
+                <div className="panel-content">
+                  <h2>{panel.title[language]}</h2>
+
+                  {panel.description[language].split("\n\n").map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+
+                  <h3>{tr("Highlights:", "Logros:")}</h3>
+                  <ul>
+                    {panel.highlights.map((highlight) => (
+                      <li key={highlight.en}>{highlight[language]}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    if (activeSection === "program") {
+      const toggleProgramDay = (dayId: string) => {
+        setExpandedProgramDays((prev) => ({
+          ...prev,
+          [dayId]: !prev[dayId],
+        }));
+      };
+
+      return (
+        <article className="surface page-block program-page-block">
+          <h2>{tr("Conference program", "Programa de conferencia")}</h2>
+          
+          <section className="program-embed-wrap" aria-label={tr("PDF program viewer", "Visor PDF del programa")}>
+            <iframe
+              src="./docs/MCPR2026_Program.pdf"
+              title={tr("MCPR 2026 Program PDF", "PDF Programa MCPR 2026")}
+              className="program-embed-frame"
+              style={{
+                width: "100%",
+                minHeight: "800px",
+                border: "1px solid #d8e0e9",
+                borderRadius: "12px",
+              }}
+            />
+          </section>
+          
+          <div className="program-doc-actions" style={{ marginBottom: "2rem", marginTop: "2rem" }}>
+            <a 
+              href="./docs/MCPR2026_Program.pdf" 
+              download 
+              style={{
+                display: "inline-block",
+                padding: "12px 24px",
+                backgroundColor: "#007bff",
+                color: "white",
+                textDecoration: "none",
+                borderRadius: "6px",
+                fontWeight: "600",
+                fontSize: "1.1rem",
+                marginRight: "12px",
+                marginBottom: "12px",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLAnchorElement;
+                target.style.backgroundColor = "#0056b3";
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLAnchorElement;
+                target.style.backgroundColor = "#007bff";
+              }}
+            >
+              {tr("Download Program PDF", "Descargar Programa PDF")}
+            </a>
+          </div>
+
+          <p>
+            {tr(
+              "Consult the official program document and browse the schedule breakdown by day.",
+              "Consulta el documento oficial del programa y revisa el desglose de actividades por dia."
+            )}
+          </p>
+
+          <div className="program-day-jump-links" aria-label={tr("Program links by day", "Enlaces del programa por dia")}>
+            {programLinksPerDay.map((day) => (
+              <a key={day.id} href={day.href}>
+                {language === "es" ? day.es : day.en}
+              </a>
+            ))}
+          </div>
+
+          <div className="program-days-stack">
+            {conferenceProgramByDay.map((day) => (
+              <section key={day.id} id={`program-day-${day.id}`} className="program-day-card">
+                <button
+                  type="button"
+                  onClick={() => toggleProgramDay(day.id)}
+                  style={{
+                    width: "100%",
+                    padding: "16px",
+                    textAlign: "left",
+                    backgroundColor: "#f8f9fa",
+                    border: "1px solid #dee2e6",
+                    borderRadius: "6px",
+                    fontWeight: "600",
+                    fontSize: "1.1rem",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    transition: "background-color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    const target = e.target as HTMLButtonElement;
+                    target.style.backgroundColor = "#e9ecef";
+                  }}
+                  onMouseLeave={(e) => {
+                    const target = e.target as HTMLButtonElement;
+                    target.style.backgroundColor = "#f8f9fa";
+                  }}
+                >
+                  <span>{language === "es" ? day.day.es : day.day.en}</span>
+                  <span style={{ fontSize: "1.3rem" }}>
+                    {expandedProgramDays[day.id] ? "▼" : "▶"}
+                  </span>
+                </button>
+                
+                {expandedProgramDays[day.id] && (
+                  <ul 
+                    className="program-day-full-list"
+                    style={{
+                      marginTop: "12px",
+                      animation: "slideDown 0.3s ease",
+                    }}
+                  >
+                    {day.schedule.map((item, index) => (
+                      <li key={`${day.id}-${index}`} className={!item.time ? "session-heading" : ""}>
+                        {item.time && <span className="program-time">{item.time}</span>}
+                        <span className="program-activity">{language === "es" ? item.es : item.en}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
+
+          <style>{`
+            @keyframes slideDown {
+              from {
+                opacity: 0;
+                transform: translateY(-10px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
+        </article>
       );
     }
 
@@ -960,6 +1347,21 @@ Durante la sesión práctica, los participantes podrán:`,
               Centro de Innovacion e Integracion de Tecnologias Avanzadas (CIITA)
             </figcaption>
           </figure>
+
+          
+          <figure className="venue-image-card mt-5">
+            <Image
+              src="./img/info-2.jpeg"
+              alt="Centro de Innovacion e Integracion de Tecnologias Avanzadas CIITA"
+              width={1200}
+              height={1800}
+              className="venue-image"
+              priority
+            />
+            <figcaption>
+              Centro de Innovacion e Integracion de Tecnologias Avanzadas (CIITA)
+            </figcaption>
+          </figure>
         </article>
       );
     }
@@ -1094,41 +1496,35 @@ Durante la sesión práctica, los participantes podrán:`,
           <section className="surface side-card accent-program">
             <h3>{tr("Conference program", "Programa de conferencia")}</h3>
             <p>{tr("Complete program in PDF", "Programa completo en PDF")}</p>
-            <div className="program-dropdown">
-              <button
-                type="button"
-                className="program-dropdown-toggle"
-                aria-haspopup="menu"
-                aria-expanded={isProgramMenuOpen}
-                onClick={() => setIsProgramMenuOpen((prev) => !prev)}
-              >
-                {tr("Program and links per day", "Programa y enlaces por dia")}
-              </button>
-              {isProgramMenuOpen && (
-                <ul className="program-dropdown-menu" role="menu" aria-label={tr("Program links by day", "Enlaces del programa por dia")}>
-                  {programLinksPerDay.map((day) => (
-                    <li key={day.en} role="none">
-                      <a
-                        role="menuitem"
-                        href={day.href}
-                        onClick={() => setIsProgramMenuOpen(false)}
-                      >
-                        {language === "es" ? day.es : day.en}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <button
+              type="button"
+              className="program-action-button"
+              onClick={() => {
+                navigateToSection("program");
+                setIsPreviousMenuOpen(false);
+              }}
+            >
+              {tr("Program", "Programa")}
+            </button>
             <button
               type="button"
               className="program-action-button"
               onClick={() => {
                 navigateToSection("tutorials");
-                setIsProgramMenuOpen(false);
+                setIsPreviousMenuOpen(false);
               }}
             >
               {tr("Tutorials MCPR 2026", "Tutoriales MCPR 2026")}
+            </button>
+            <button
+              type="button"
+              className="program-action-button"
+              onClick={() => {
+                navigateToSection("panels");
+                setIsPreviousMenuOpen(false);
+              }}
+            >
+              {tr("Panels MCPR 2026", "Paneles MCPR 2026")}
             </button>
             <p className="mini-note">{tr("Access links to the virtual conference:", "Acceso a enlaces de la conferencia virtual:")}</p>
             <button type="button">{tr("Coming soon!", "Proximamente!")}</button>
