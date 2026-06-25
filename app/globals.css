@@ -1096,12 +1096,111 @@ body {
 .media-box-image {
   background: #ffffff;
   border-color: #dfe5ec;
+  overflow: hidden;
+}
+
+.sponsor-carousel-box {
+  margin: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid #d6dee8;
+  background: #ffffff;
+  padding: 0.7rem;
+  overflow: hidden;
+}
+
+.sponsor-carousel {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.sponsor-card-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 320px);
+  max-width: 100%;
+  min-height: 132px;
+  padding: 0.3rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 220ms ease;
+}
+
+.sponsor-card-item:hover {
+  transform: translateY(-1px);
+}
+
+.sponsor-carousel-controls {
+  width: min(100%, 320px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.side-card .sponsor-carousel-controls button {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border-radius: 999px;
+  text-align: center;
+}
+
+.sponsor-carousel-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid #d2dce7;
+  background: #ffffff;
+  color: #143655;
+  font-weight: 700;
+  line-height: 28px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.sponsor-carousel-arrow:hover {
+  background: #f1f6fb;
+  border-color: #bfd0e2;
+  transform: translateY(-1px);
+}
+
+.sponsor-carousel-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sponsor-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 0;
+  min-height: 0;
+  min-width: 0;
+  background: #b9c9d8;
+  cursor: pointer;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.sponsor-carousel-dot.is-active {
+  background: #2a5f88;
+  transform: scale(1.2);
 }
 
 .sponsor-card-logo {
+  display: block;
   width: 100%;
-  height: 100%;
-  max-height: 110px;
+  height: auto;
+  max-width: 100%;
+  max-height: 108px;
   object-fit: contain;
 }
 
@@ -1201,6 +1300,17 @@ body {
   background: #f7f9fc;
   border-top: 1px solid var(--line);
   letter-spacing: 0.05em;
+}
+
+.credit-link {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.credit-link:hover {
+  color: #234e73;
 }
 
 .credit {
@@ -1654,6 +1764,26 @@ body {
   font-size: 0.96rem;
 }
 
+.fees-download-wrap {
+  margin: 1rem 0 0;
+}
+
+.fees-download-link {
+  display: inline-block;
+  border: 1px solid #d8e0e9;
+  background: #f6f9fc;
+  border-radius: 10px;
+  padding: 0.58rem 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #15324b;
+}
+
+.fees-download-link:hover {
+  background: #ecf5fb;
+  border-color: #b9cfdf;
+}
+
 .tutorials-section {
   display: grid;
   gap: 1rem;
@@ -1869,7 +1999,7 @@ body {
   width: 200px;
   height: 200px;
   margin: 0 auto 1rem;
-  border-radius: 12px;
+  border-radius: 50%;
   overflow: hidden;
   background: #ffffff;
   box-shadow: 0 10px 28px rgb(15 23 35 / 10%);
@@ -1983,5 +2113,155 @@ body {
   .panel-content p,
   .panel-content li {
     font-size: 0.9rem;
+  }
+}
+
+/* ── Accordion cards (keynote + panelists) ── */
+.accordion-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.accordion-card {
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 0;
+}
+
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms ease;
+}
+
+.accordion-trigger:hover {
+  background: #f4f8fc;
+}
+
+.accordion-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.accordion-avatar {
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 72px;
+  min-width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e8edf3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #4a6880;
+}
+
+.accordion-avatar--panel {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgb(15 23 35 / 10%);
+}
+
+.accordion-summary-text {
+  min-width: 0;
+}
+
+.accordion-name {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #13273f;
+  line-height: 1.35;
+}
+
+.accordion-sub {
+  margin: 0 0 0.2rem;
+  font-size: 0.82rem;
+  color: #5a7085;
+  line-height: 1.4;
+}
+
+.accordion-title-preview {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #3a5775;
+  font-style: italic;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55ch;
+}
+
+.accordion-chevron {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: #7a95ab;
+  transition: transform 200ms ease;
+}
+
+.accordion-body {
+  padding: 0 1.4rem 1.4rem;
+  border-top: 1px solid #e8ecf2;
+}
+
+.accordion-full-title {
+  margin: 1rem 0 1rem;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: #13273f;
+  line-height: 1.3;
+}
+
+.accordion-body-text {
+  margin: 0 0 0.85rem;
+  font-size: 0.95rem;
+  color: #526079;
+  line-height: 1.65;
+}
+
+.accordion-highlights-label {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #163247;
+}
+
+.accordion-highlights {
+  margin: 0 0 0.5rem;
+  padding-left: 1.25rem;
+  color: #526079;
+}
+
+.accordion-highlights li {
+  margin: 0.4rem 0;
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 600px) {
+  .accordion-title-preview {
+    max-width: 28ch;
+  }
+
+  .accordion-trigger {
+    padding: 0.9rem 1rem;
+  }
+
+  .accordion-body {
+    padding: 0 1rem 1rem;
   }
 }

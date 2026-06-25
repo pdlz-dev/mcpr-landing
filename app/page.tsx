@@ -19,9 +19,29 @@ const VALID_SECTION_IDS = [
   "conference-venue",
   "contact",
   "registration",
+  "fees",
   "program",
   "tutorials",
   "panels",
+  "live-transmission",
+];
+
+const SPONSOR_ITEMS = [
+  {
+    href: "https://durol.com.mx/page/",
+    src: "./sponsors/durol.jpg",
+    alt: "DUROL",
+  },
+  {
+    href: "https://imechatronic.com/",
+    src: "./sponsors/mechatronics.jpeg",
+    alt: "IME Mechatronics",
+  },
+  {
+    href: "https://www.ergotech.mx/",
+    src: "./sponsors/ergo-tech.jpeg",
+    alt: "Ergo Tech",
+  },
 ];
 
 function HomeContent() {
@@ -29,6 +49,10 @@ function HomeContent() {
   const searchParams = useSearchParams();
   const [language, setLanguage] = useState<"en" | "es">("en");
   const [isPreviousMenuOpen, setIsPreviousMenuOpen] = useState(false);
+  const [activeSponsorIndex, setActiveSponsorIndex] = useState(0);
+  const [expandedPeople, setExpandedPeople] = useState<{ [key: string]: boolean }>({});
+  const togglePerson = (key: string) => setExpandedPeople((prev) => ({ ...prev, [key]: !prev[key] }));
+
   const [expandedProgramDays, setExpandedProgramDays] = useState<{ [key: string]: boolean }>({
     wednesday: false,
     thursday: false,
@@ -38,8 +62,9 @@ function HomeContent() {
   const tr = (en: string, es: string) => (language === "es" ? es : en);
 
   const tabParam = searchParams.get("tab");
+  const normalizedTab = tabParam === "panels" ? "keynote-speakers" : tabParam;
   const activeSection =
-    tabParam && VALID_SECTION_IDS.includes(tabParam) ? tabParam : "home";
+    normalizedTab && VALID_SECTION_IDS.includes(normalizedTab) ? normalizedTab : "home";
 
   const navigateToSection = (sectionId: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -48,7 +73,7 @@ function HomeContent() {
   };
 
   useEffect(() => {
-    if (tabParam && VALID_SECTION_IDS.includes(tabParam)) {
+    if (normalizedTab && VALID_SECTION_IDS.includes(normalizedTab)) {
       return;
     }
 
@@ -56,7 +81,17 @@ function HomeContent() {
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", fallback);
     router.replace(`?${params.toString()}`, { scroll: false });
-  }, [router, searchParams, tabParam]);
+  }, [normalizedTab, router, searchParams]);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveSponsorIndex((current) => (current + 1) % SPONSOR_ITEMS.length);
+    }, 4200);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
 
   const conferenceProgramByDay = [
     {
@@ -64,78 +99,78 @@ function HomeContent() {
       day: { en: "Wednesday, June 24", es: "Miercoles, 24 de junio" },
       schedule: [
         { time: "9:00 - 9:20", en: "Opening Ceremony", es: "Ceremonia de apertura" },
-        { time: "9:20 - 10:20", en: "Keynote Address: New Paradigms in Sensors and Computer Vision Methods + Comments on Artificial Intelligence Production at an International Scale (Prof. Walterio Mayol-Cuevas)", es: "Conferencia magistral: New Paradigms in Sensors and Computer Vision Methods + Comments on Artificial Intelligence Production at an International Scale (Prof. Walterio Mayol-Cuevas)" },
+        { time: "9:20 - 10:20", en: "Keynote Address: New Paradigms in Sensors and Computer Vision Methods + Comments on Artificial Intelligence Production at an International Scale — Prof. Walterio Mayol-Cuevas (University of Bristol, UK)", es: "Conferencia magistral: New Paradigms in Sensors and Computer Vision Methods + Comments on Artificial Intelligence Production at an International Scale — Prof. Walterio Mayol-Cuevas (University of Bristol, UK)" },
         { time: "10:20 - 10:40", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 1: Pattern Recognition and Machine Learning Techniques", es: "Sesion 1: Tecnicas de reconocimiento de patrones y aprendizaje automatico" },
-        { time: "10:40 - 11:00", en: "Evaluation of Clustering and Consensus Models for Classifying Adulterant Levels in Alcoholic Beverages Using Single-Shot Interferograms", es: "Evaluation of Clustering and Consensus Models for Classifying Adulterant Levels in Alcoholic Beverages Using Single-Shot Interferograms" },
-        { time: "11:00 - 11:20", en: "Beyond Pareto: A High-Efficiency Approach to Bi-Objective Regression Trees", es: "Beyond Pareto: A High-Efficiency Approach to Bi-Objective Regression Trees" },
-        { time: "11:20 - 11:40", en: "Ensembles of Manifold Learners for Supervised and Unsupervised Learning", es: "Ensembles of Manifold Learners for Supervised and Unsupervised Learning" },
-        { time: "11:40 - 12:00", en: "Application of Unsupervised Pattern Recognition for the Structural Characterization of Masonry Walls", es: "Application of Unsupervised Pattern Recognition for the Structural Characterization of Masonry Walls" },
+        { time: "", en: "Session 1: Pattern Recognition and Machine Learning Techniques — Chair: Prof. Erik Rodner", es: "Sesion 1: Tecnicas de reconocimiento de patrones y aprendizaje automatico — Presidente: Prof. Erik Rodner" },
+        { time: "10:40 - 11:00", en: "Evaluation of Clustering and Consensus Models for Classifying Adulterant Levels in Alcoholic Beverages Using Single-Shot Interferograms — E. López-Meléndez, R. I. Álvarez-Tamayo, A. Barcelata-Pinzón, P. Prieto-Cortés, and L. D. Lara-Rodríguez", es: "Evaluation of Clustering and Consensus Models for Classifying Adulterant Levels in Alcoholic Beverages Using Single-Shot Interferograms — E. López-Meléndez et al." },
+        { time: "11:00 - 11:20", en: "Beyond Pareto: A High-Efficiency Approach to Bi-Objective Regression Trees — Erick G.G. de Paz, Arturo Hernández-Aguirre, and Iván Cruz-Aceves", es: "Beyond Pareto: A High-Efficiency Approach to Bi-Objective Regression Trees — Erick G.G. de Paz et al." },
+        { time: "11:20 - 11:40", en: "Ensembles of Manifold Learners for Supervised and Unsupervised Learning — Fabiola Muñoz Vera, Juan Manuel Pérez Ortega, Eduardo F. Morales, and Hugo Jair Escalante", es: "Ensembles of Manifold Learners for Supervised and Unsupervised Learning — Fabiola Muñoz Vera et al." },
+        { time: "11:40 - 12:00", en: "Application of Unsupervised Pattern Recognition for the Structural Characterization of Masonry Walls — Miguel Ángel Tlatzimatzi Flores, María Guadalupe Medina Barrera, and Eduardo Ismael Hernández", es: "Application of Unsupervised Pattern Recognition for the Structural Characterization of Masonry Walls — Miguel Ángel Tlatzimatzi Flores et al." },
         { time: "12:00 - 12:20", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 2: Pattern Recognition and Machine Learning Techniques", es: "Sesion 2: Tecnicas de reconocimiento de patrones y aprendizaje automatico" },
-        { time: "12:20 - 12:40", en: "Clustering Algorithms for Density Variations: An Empirical Comparison", es: "Clustering Algorithms for Density Variations: An Empirical Comparison" },
-        { time: "12:40 - 13:00", en: "Dissimilarity-Based Graph Embedding via Local and Global Approximate Graph Patterns", es: "Dissimilarity-Based Graph Embedding via Local and Global Approximate Graph Patterns" },
-        { time: "13:00 - 13:20", en: "Comprehensive Validation of Brex Sequential Classifier Model for Robust Pattern Recognition", es: "Comprehensive Validation of Brex Sequential Classifier Model for Robust Pattern Recognition" },
-        { time: "13:20 - 13:40", en: "A Machine Learning Framework for High-Performance Electrolyte Classification in Lithium Metal Batteries", es: "A Machine Learning Framework for High-Performance Electrolyte Classification in Lithium Metal Batteries" },
-        { time: "13:40 - 14:00", en: "Dynamic Assessment of Landslide Susceptibility at Pico de Orizaba Using Ensemble Classifiers and Multitemporal Analysis", es: "Dynamic Assessment of Landslide Susceptibility at Pico de Orizaba Using Ensemble Classifiers and Multitemporal Analysis" },
+        { time: "", en: "Session 2: Pattern Recognition and Machine Learning Techniques — Chair: Prof. Humberto de Jesús Ochoa Domínguez", es: "Sesion 2: Tecnicas de reconocimiento de patrones y aprendizaje automatico — Presidente: Prof. Humberto de Jesús Ochoa Domínguez" },
+        { time: "12:20 - 12:40", en: "Clustering Algorithms for Density Variations: An Empirical Comparison — Adrián J. Ramírez-Díaz, José Fco. Martínez-Trinidad, and J. Ariel Carrasco-Ochoa", es: "Clustering Algorithms for Density Variations: An Empirical Comparison — Adrián J. Ramírez-Díaz et al." },
+        { time: "12:40 - 13:00", en: "Dissimilarity-Based Graph Embedding via Local and Global Approximate Graph Patterns — Daybelis Jaramillo-Olivares, J. Ariel Carrasco-Ochoa, and José Fco. Martínez-Trinidad", es: "Dissimilarity-Based Graph Embedding via Local and Global Approximate Graph Patterns — Daybelis Jaramillo-Olivares et al." },
+        { time: "13:00 - 13:20", en: "Comprehensive Validation of Brex Sequential Classifier Model for Robust Pattern Recognition — Gerardo Acevedo-Sánchez, J. Pacheco-Senard, A. Alarcón-Paredes, Ó. Camacho-Nieto, and C. Yáñez-Márquez", es: "Comprehensive Validation of Brex Sequential Classifier Model for Robust Pattern Recognition — Gerardo Acevedo-Sánchez et al." },
+        { time: "13:20 - 13:40", en: "A Machine Learning Framework for High-Performance Electrolyte Classification in Lithium Metal Batteries — Sergio Rubén Ocampo-Pérez, Noureddine Lakouari, and Outmane Oubram", es: "A Machine Learning Framework for High-Performance Electrolyte Classification in Lithium Metal Batteries — Sergio Rubén Ocampo-Pérez et al." },
+        { time: "13:40 - 14:00", en: "Dynamic Assessment of Landslide Susceptibility at Pico de Orizaba Using Ensemble Classifiers and Multitemporal Analysis — Adhara Alejandra Avendaño Barajas, L. Altamirano Robles, R. Díaz Hernández, and S. Zapotecas Martínez", es: "Dynamic Assessment of Landslide Susceptibility at Pico de Orizaba Using Ensemble Classifiers and Multitemporal Analysis — Adhara Alejandra Avendaño Barajas et al." },
         { time: "14:00 - 15:00", en: "Lunch", es: "Comida" },
-        { time: "", en: "Session 3: Deep Learning and Neural Networks", es: "Sesion 3: Deep learning y redes neuronales" },
-        { time: "15:00 - 15:20", en: "Banking Fraud Detection Using Neural Network Models", es: "Banking Fraud Detection Using Neural Network Models" },
-        { time: "15:20 - 15:40", en: "Variational Standard Simplex Hierarchical Encoder for Clustering", es: "Variational Standard Simplex Hierarchical Encoder for Clustering" },
-        { time: "15:40 - 16:00", en: "Chest CT Gender Domain Translation: Comparative Evaluation of CycleGAN and cVAE in Radiometric and Volumetric Coherence", es: "Chest CT Gender Domain Translation: Comparative Evaluation of CycleGAN and cVAE in Radiometric and Volumetric Coherence" },
-        { time: "16:00 - 16:20", en: "Detection of Dangerous Wildlife in a Dynamic Environment Using Deep Learning", es: "Detection of Dangerous Wildlife in a Dynamic Environment Using Deep Learning" },
+        { time: "", en: "Session 3: Deep Learning and Neural Networks — Chair: Prof. Juan Humberto Sossa Azuela", es: "Sesion 3: Deep learning y redes neuronales — Presidente: Prof. Juan Humberto Sossa Azuela" },
+        { time: "15:00 - 15:20", en: "Banking Fraud Detection Using Neural Network Models — Ostin Uriel Martínez Campos, Andrés Ferreyra-Ramírez, Eduardo Rodríguez-Martínez, and Carlos Avilés-Cruz", es: "Banking Fraud Detection Using Neural Network Models — Ostin Uriel Martínez Campos et al." },
+        { time: "15:20 - 15:40", en: "Variational Standard Simplex Hierarchical Encoder for Clustering — Ulises Rodríguez-Domínguez", es: "Variational Standard Simplex Hierarchical Encoder for Clustering — Ulises Rodríguez-Domínguez" },
+        { time: "15:40 - 16:00", en: "Chest CT Gender Domain Translation: Comparative Evaluation of CycleGAN and cVAE in Radiometric and Volumetric Coherence — I. Delgado Navarro, G. J. Alvarado Flores, L. Altamirano Robles, R. Díaz Hernández, and S. Zapotecas Martínez", es: "Chest CT Gender Domain Translation: Comparative Evaluation of CycleGAN and cVAE in Radiometric and Volumetric Coherence — I. Delgado Navarro et al." },
+        { time: "16:00 - 16:20", en: "Detection of Dangerous Wildlife in a Dynamic Environment Using Deep Learning — David Cruz-Villavicencio and Jesús Alberto Martínez-Castro", es: "Detection of Dangerous Wildlife in a Dynamic Environment Using Deep Learning — David Cruz-Villavicencio and Jesús Alberto Martínez-Castro" },
         { time: "16:20 - 16:40", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 4: Deep Learning and Neural Networks / Pattern Recognition and Machine Learning Techniques", es: "Sesion 4: Deep learning y redes neuronales / reconocimiento de patrones y aprendizaje automatico" },
-        { time: "16:40 - 17:00", en: "Spatiotemporal Prediction of Wildfires Spread Using Deep Learning", es: "Spatiotemporal Prediction of Wildfires Spread Using Deep Learning" },
-        { time: "17:00 - 17:20", en: "A Safety-Aware Approach for Automated Urine Culture Screening Using Calibrated Deep Learning", es: "A Safety-Aware Approach for Automated Urine Culture Screening Using Calibrated Deep Learning" },
-        { time: "17:20 - 17:40", en: "Modeling Tumor Progression in Mammography with Conditional Generative Adversarial Networks", es: "Modeling Tumor Progression in Mammography with Conditional Generative Adversarial Networks" },
-        { time: "17:40 - 18:00", en: "Customer Preferences Recognition in Neuromarketing: Improving Accuracy with Autoregressive Modeling, Genetic Algorithms, and Naive Bayes", es: "Customer Preferences Recognition in Neuromarketing: Improving Accuracy with Autoregressive Modeling, Genetic Algorithms, and Naive Bayes" },
+        { time: "", en: "Session 4: Deep Learning & Neural Networks / Pattern Recognition and Machine Learning Techniques — Chair: Prof. Walterio Mayol-Cuevas", es: "Sesion 4: Deep learning y redes neuronales / Reconocimiento de patrones — Presidente: Prof. Walterio Mayol-Cuevas" },
+        { time: "16:40 - 17:00", en: "Spatiotemporal Prediction of Wildfires Spread Using Deep Learning — Ángel Itzcoatl Huizar Bretado, Raquel Díaz Hernández, K. A. Ramírez Gutiérrez, and L. Altamirano Robles", es: "Spatiotemporal Prediction of Wildfires Spread Using Deep Learning — Ángel Itzcoatl Huizar Bretado et al." },
+        { time: "17:00 - 17:20", en: "A Safety-Aware Approach for Automated Urine Culture Screening Using Calibrated Deep Learning — G. J. Alvarado Flores, I. Delgado Navarro, R. Díaz Hernández, L. Altamirano Robles, and S. Zapotecas Martínez", es: "A Safety-Aware Approach for Automated Urine Culture Screening Using Calibrated Deep Learning — G. J. Alvarado Flores et al." },
+        { time: "17:20 - 17:40", en: "Modeling Tumor Progression in Mammography with Conditional Generative Adversarial Networks — Alfonso Rojas-Domínguez and Jesús Yaljá Montiel Pérez", es: "Modeling Tumor Progression in Mammography with Conditional Generative Adversarial Networks — Alfonso Rojas-Domínguez and Jesús Yaljá Montiel Pérez" },
+        { time: "17:40 - 18:00", en: "Customer Preferences Recognition in Neuromarketing: Improving Accuracy with Autoregressive Modeling, Genetic Algorithms, and Naive Bayes — Christian Ruiz-Ugalde, R. A. García-Hernández, J. Rojas-Simón, Y. L., and Marco Antonio Ramos-Corchado", es: "Customer Preferences Recognition in Neuromarketing: Improving Accuracy with Autoregressive Modeling, Genetic Algorithms, and Naive Bayes — Christian Ruiz-Ugalde et al." },
       ],
     },
     {
       id: "thursday",
       day: { en: "Thursday, June 25", es: "Jueves, 25 de junio" },
       schedule: [
-        { time: "9:00 - 10:00", en: "Panel in Spanish: Las Voces del Manana - Ninos Genio Debaten sobre Inteligencia Artificial", es: "Panel en espanol: Las Voces del Manana - Ninos Genio Debaten sobre Inteligencia Artificial" },
+        { time: "9:00 - 10:00", en: "Panel in Spanish: Las Voces del Mañana — David Da Vinci y Luis Villarreal Debaten sobre Inteligencia Artificial", es: "Panel en español: Las Voces del Mañana — David Da Vinci y Luis Villarreal Debaten sobre Inteligencia Artificial" },
         { time: "10:00 - 10:20", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 5: Medical Applications of Pattern Recognition", es: "Sesion 5: Aplicaciones medicas del reconocimiento de patrones" },
-        { time: "10:20 - 10:40", en: "Machine Learning Algorithms for Identifying Attention-Deficit/Hyperactivity Disorder Processing Electroencephalographic Signals", es: "Machine Learning Algorithms for Identifying Attention-Deficit/Hyperactivity Disorder Processing Electroencephalographic Signals" },
-        { time: "10:40 - 11:00", en: "Graph-Based Modeling of Disfluent Speech for Alzheimer Detection", es: "Graph-Based Modeling of Disfluent Speech for Alzheimer Detection" },
-        { time: "11:00 - 11:20", en: "Factors Associated with Depression in Mexico: An XAI Comparative Analysis of Tree-Based Classifiers Under Imbalanced Data", es: "Factors Associated with Depression in Mexico: An XAI Comparative Analysis of Tree-Based Classifiers Under Imbalanced Data" },
+        { time: "", en: "Session 5: Medical Applications of Pattern Recognition — Chair: Prof. Salvador E. Venegas-Andraca", es: "Sesion 5: Aplicaciones medicas del reconocimiento de patrones — Presidente: Prof. Salvador E. Venegas-Andraca" },
+        { time: "10:20 - 10:40", en: "Machine Learning Algorithms for Identifying Attention-Deficit/Hyperactivity Disorder Processing Electroencephalographic Signals — Erika Altair Castro-Verazas, Saúl Brandon Lima-Portillo, Delia Irazú Hernández-Farías, and C. A. Reyes-García", es: "Machine Learning Algorithms for Identifying Attention-Deficit/Hyperactivity Disorder Processing Electroencephalographic Signals — Erika Altair Castro-Verazas et al." },
+        { time: "10:40 - 11:00", en: "Graph-Based Modeling of Disfluent Speech for Alzheimer's Detection — Carlos A. Olachea-Hernández, Luis Villaseñor-Pineda, Manuel Montes-y-Gómez, and F. J. Martínez-Santiago", es: "Graph-Based Modeling of Disfluent Speech for Alzheimer's Detection — Carlos A. Olachea-Hernández et al." },
+        { time: "11:00 - 11:20", en: "Factors Associated with Depression in Mexico: An XAI Comparative Analysis of Tree-Based Classifiers Under Imbalanced Data — Abigail Romero-Trejo, A. Guzmán-Ponce, R.M. Valdovinos-Rosas, L. Cleofas-Sánchez, and I. Francisco-Valencia", es: "Factors Associated with Depression in Mexico: An XAI Comparative Analysis of Tree-Based Classifiers Under Imbalanced Data — Abigail Romero-Trejo et al." },
         { time: "11:20 - 11:40", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 6: Medical Applications of Pattern Recognition / Computer Vision", es: "Sesion 6: Aplicaciones medicas del reconocimiento de patrones / vision por computadora" },
-        { time: "11:40 - 12:00", en: "Hierarchical Incremental Learning for Adaptive Breast Thermography Classification", es: "Hierarchical Incremental Learning for Adaptive Breast Thermography Classification" },
-        { time: "12:00 - 12:20", en: "Automatic Classification of Subcutaneous Mycoses in Clinical Images Using Transfer Learning", es: "Automatic Classification of Subcutaneous Mycoses in Clinical Images Using Transfer Learning" },
-        { time: "12:20 - 12:40", en: "Upsampling of Sparse Three-Dimensional Point Clouds Using iFactor-KDtree with Adaptive Interpolation", es: "Upsampling of Sparse Three-Dimensional Point Clouds Using iFactor-KDtree with Adaptive Interpolation" },
+        { time: "", en: "Session 6: Medical Applications of Pattern Recognition / Computer Vision — Chair: Prof. Salvador E. Venegas-Andraca", es: "Sesion 6: Aplicaciones medicas del reconocimiento de patrones / Vision por computadora — Presidente: Prof. Salvador E. Venegas-Andraca" },
+        { time: "11:40 - 12:00", en: "Hierarchical Incremental Learning for Adaptive Breast Thermography Classification — Yareli Aburto-Sánchez, Pilar Gómez-Gil, and Leopoldo Altamirano-Robles", es: "Hierarchical Incremental Learning for Adaptive Breast Thermography Classification — Yareli Aburto-Sánchez et al." },
+        { time: "12:00 - 12:20", en: "Automatic Classification of Subcutaneous Mycoses in Clinical Images Using Transfer Learning — Vania Déborah Vázquez Palacios, Julio César Pérez Sansalvador, and Humberto Pérez Espinoza", es: "Automatic Classification of Subcutaneous Mycoses in Clinical Images Using Transfer Learning — Vania Déborah Vázquez Palacios et al." },
+        { time: "12:20 - 12:40", en: "Upsampling of Sparse Three-Dimensional Point Clouds Using iFactor-KDtree with Adaptive Interpolation — Dora-Luz Almanza-Ojeda, Mario-Alberto Ibarra-Manzano, Carlos A. Pérez-Ramírez, and Yair A. Andrade-Ambriz", es: "Upsampling of Sparse Three-Dimensional Point Clouds Using iFactor-KDtree with Adaptive Interpolation — Dora-Luz Almanza-Ojeda et al." },
         { time: "12:40 - 13:00", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "13:00 - 14:00", en: "Keynote Address: Foundation Models for Microscopy and Medical Data Analysis (Prof. Erik Rodner)", es: "Conferencia magistral: Foundation Models for Microscopy and Medical Data Analysis (Prof. Erik Rodner)" },
+        { time: "13:00 - 14:00", en: "Keynote Address: Foundation Models for Microscopy and Medical Data Analysis — Prof. Erik Rodner (University of Applied Sciences Berlin, Germany)", es: "Conferencia magistral: Foundation Models for Microscopy and Medical Data Analysis — Prof. Erik Rodner (University of Applied Sciences Berlin, Germany)" },
         { time: "14:00 - 15:00", en: "Lunch", es: "Comida" },
-        { time: "", en: "Session 7: Language Processing and Recognition", es: "Sesion 7: Procesamiento y reconocimiento de lenguaje" },
-        { time: "15:00 - 15:20", en: "A Two-Stage Textual Preprocessing Pipeline for Medical Image Captioning", es: "A Two-Stage Textual Preprocessing Pipeline for Medical Image Captioning" },
-        { time: "15:20 - 15:40", en: "Semantic Pattern Recognition in Scientific Literature Using Hybrid Topic Modeling and SciBERT With LoRA-Based Validation", es: "Semantic Pattern Recognition in Scientific Literature Using Hybrid Topic Modeling and SciBERT With LoRA-Based Validation" },
-        { time: "15:40 - 16:00", en: "Automatic Depressive Symptom Detection on Social Media Using the BDI-II", es: "Automatic Depressive Symptom Detection on Social Media Using the BDI-II" },
-        { time: "16:00 - 16:20", en: "Statistical Analysis of Combined Adversarial Attacks on Spam Detection Models", es: "Statistical Analysis of Combined Adversarial Attacks on Spam Detection Models" },
+        { time: "", en: "Session 7: Language Processing and Recognition — Chair: Prof. Ramón Iván Barraza Castillo", es: "Sesion 7: Procesamiento y reconocimiento de lenguaje — Presidente: Prof. Ramón Iván Barraza Castillo" },
+        { time: "15:00 - 15:20", en: "A Two-Stage Textual Preprocessing Pipeline for Medical Image Captioning — S. Rascón-Cervantes, G. Ramírez-Alonso, A. Pastor López-Monroy, R. López-Santillán, and N. A. Rendón Mejía", es: "A Two-Stage Textual Preprocessing Pipeline for Medical Image Captioning — S. Rascón-Cervantes et al." },
+        { time: "15:20 - 15:40", en: "Semantic Pattern Recognition in Scientific Literature Using Hybrid Topic Modeling and SciBERT With LoRA-Based Validation — Yessenia Díaz Álvarez, Raúl Pinto Elías, A. Magadán Salazar, Noé A. Castro Sánchez, and J. Fuentes Pacheco", es: "Semantic Pattern Recognition in Scientific Literature Using Hybrid Topic Modeling and SciBERT With LoRA-Based Validation — Yessenia Díaz Álvarez et al." },
+        { time: "15:40 - 16:00", en: "Automatic Depressive Symptom Detection on Social Media Using the BDI-II — Cielo Aholiva Higuera-Gutiérrez, I. H. López-Nava, M. Montes-y-Gómez, M. Ezra Aragón, and D. E. Losada", es: "Automatic Depressive Symptom Detection on Social Media Using the BDI-II — Cielo Aholiva Higuera-Gutiérrez et al." },
+        { time: "16:00 - 16:20", en: "Statistical Analysis of Combined Adversarial Attacks on Spam Detection Models — Samantha Acosta Ruiz, Mireya Tovar Vidal, and José A. Reyes-Ortiz", es: "Statistical Analysis of Combined Adversarial Attacks on Spam Detection Models — Samantha Acosta Ruiz et al." },
         { time: "16:20 - 16:40", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 8: Language Processing and Recognition / Computer Vision", es: "Sesion 8: Procesamiento y reconocimiento de lenguaje / vision por computadora" },
-        { time: "16:40 - 17:00", en: "InCvT: A Hybrid Inception-Convolutional Vision Transformer Architecture for Speech Emotion Recognition", es: "InCvT: A Hybrid Inception-Convolutional Vision Transformer Architecture for Speech Emotion Recognition" },
-        { time: "17:20 - 17:40", en: "Comparative Statistical Analysis of Sentiment Models in Spanish Political Discourse on YouTube", es: "Comparative Statistical Analysis of Sentiment Models in Spanish Political Discourse on YouTube" },
-        { time: "17:40 - 18:00", en: "VAR Based on Knowledge Transfer from VLMs and Video Descriptions", es: "VAR Based on Knowledge Transfer from VLMs and Video Descriptions" },
-        { time: "20:00 - 23:00", en: "Conference Dinner (Salon ARGOS del Centro de Convenciones Cibeles)", es: "Cena de conferencia (Salon ARGOS del Centro de Convenciones Cibeles)" },
+        { time: "", en: "Session 8: Language Processing and Recognition / Computer Vision — Chair: Prof. Ramón Iván Barraza Castillo", es: "Sesion 8: Procesamiento y reconocimiento de lenguaje / Vision por computadora — Presidente: Prof. Ramón Iván Barraza Castillo" },
+        { time: "16:40 - 17:00", en: "InCvT: A Hybrid Inception-Convolutional Vision Transformer Architecture for Speech Emotion Recognition — Juan A. Ramírez-Quintana, Eduardo Gallegos-Camarena, A. A. Torres-García, and Verónica Gallegos-Orozco", es: "InCvT: A Hybrid Inception-Convolutional Vision Transformer Architecture for Speech Emotion Recognition — Juan A. Ramírez-Quintana et al." },
+        { time: "17:20 - 17:40", en: "Comparative Statistical Analysis of Sentiment Models in Spanish Political Discourse on YouTube — Guillermo David Barrera Ortega, María Beatriz Bernabe Loranca, David Pinto Avendaño, and A. Carrillo Canán", es: "Comparative Statistical Analysis of Sentiment Models in Spanish Political Discourse on YouTube — Guillermo David Barrera Ortega et al." },
+        { time: "17:40 - 18:00", en: "VAR Based on Knowledge Transfer from VLMs and Video Descriptions — Emilio Vera-Cordero, David Mata Mendoza, Gibran Benitez-García, Hiroki Takahashi, and Mariko Nakano", es: "VAR Based on Knowledge Transfer from VLMs and Video Descriptions — Emilio Vera-Cordero et al." },
+        { time: "20:00 - 23:00", en: "Conference Dinner (Salón ARGOS del Centro de Convenciones Cibeles)", es: "Cena de conferencia (Salón ARGOS del Centro de Convenciones Cibeles)" },
       ],
     },
     {
       id: "friday",
       day: { en: "Friday, June 26", es: "Viernes, 26 de junio" },
       schedule: [
-        { time: "9:00 - 10:00", en: "Keynote Address: Quantum Computing: Foundations, Transition to Industry, and Applications in Pattern Recognition (Prof. Dr. Salvador E. Venegas-Andraca)", es: "Conferencia magistral: Quantum Computing: Foundations, Transition to Industry, and Applications in Pattern Recognition (Prof. Dr. Salvador E. Venegas-Andraca)" },
+        { time: "9:00 - 10:00", en: "Keynote Address: Quantum Computing: Foundations, Transition to Industry, and Applications in Pattern Recognition — Prof. Dr. Salvador E. Venegas-Andraca (Tecnologico de Monterrey, Campus Ciudad de Mexico)", es: "Conferencia magistral: Quantum Computing: Foundations, Transition to Industry, and Applications in Pattern Recognition — Prof. Dr. Salvador E. Venegas-Andraca (Tecnologico de Monterrey, Campus Ciudad de Mexico)" },
         { time: "10:00 - 10:10", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "10:10 - 11:25", en: "Panel in Spanish: Tecnologia con Proposito - Academia, Industria y Gobierno Dialogan sobre Inteligencia Artificial", es: "Panel en espanol: Tecnologia con Proposito - Academia, Industria y Gobierno Dialogan sobre Inteligencia Artificial" },
+        { time: "10:10 - 11:25", en: "Panel in Spanish: Tecnología con Propósito — Academia, Industria y Gobierno Dialogan sobre Inteligencia Artificial | Mtra. Elizabeth Burrola Meléndez (CIITA-IPN), Mtro. Orlando Daniel Avitia (CECyTECH), Prof. Salvador E. Venegas-Andraca (Tec de Monterrey), Ing. Javier Acosta (Mechatronics AI)", es: "Panel en español: Tecnología con Propósito — Academia, Industria y Gobierno Dialogan sobre Inteligencia Artificial | Mtra. Elizabeth Burrola Meléndez (CIITA-IPN), Mtro. Orlando Daniel Avitia (CECyTECH), Prof. Salvador E. Venegas-Andraca (Tec de Monterrey), Ing. Javier Acosta (Mechatronics AI)" },
         { time: "11:25 - 11:40", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "", en: "Session 9: Computer Vision", es: "Sesion 9: Vision por computadora" },
-        { time: "11:40 - 12:00", en: "Embedded System for Vehicle Environment Perception and License Plate Recognition (LPR) Using Computer Vision and Deep Learning", es: "Embedded System for Vehicle Environment Perception and License Plate Recognition (LPR) Using Computer Vision and Deep Learning" },
-        { time: "12:00 - 12:20", en: "Interpretable Human Activity Recognition for Subtle Robbery Detection in Surveillance Videos", es: "Interpretable Human Activity Recognition for Subtle Robbery Detection in Surveillance Videos" },
-        { time: "12:20 - 12:40", en: "Tree Crown Segmentation in UAV RGB Images via Monocular Depth Estimation", es: "Tree Crown Segmentation in UAV RGB Images via Monocular Depth Estimation" },
-        { time: "12:40 - 13:00", en: "UAV Pose Estimation in Low-Light Conditions Using Visual-LiDar Fusion", es: "UAV Pose Estimation in Low-Light Conditions Using Visual-LiDar Fusion" },
+        { time: "", en: "Session 9: Computer Vision — Chair: Prof. Jesús Ariel Carrasco Ochoa", es: "Sesion 9: Vision por computadora — Presidente: Prof. Jesús Ariel Carrasco Ochoa" },
+        { time: "11:40 - 12:00", en: "Embedded System for Vehicle Environment Perception and License Plate Recognition (LPR) Using Computer Vision and Deep Learning — R. Leonardo Méndez-Macías, J. Villegas-Cortez, A. Ferreyra Ramírez, A. Zúñiga-López, and S. Cordero-Sánchez", es: "Embedded System for Vehicle Environment Perception and License Plate Recognition (LPR) Using Computer Vision and Deep Learning — R. Leonardo Méndez-Macías et al." },
+        { time: "12:00 - 12:20", en: "Interpretable Human Activity Recognition for Subtle Robbery Detection in Surveillance Videos — Bryan Jhoan Cazáres Leyva, Ulises Gachuz Dávila, José Juan González Fonseca, Juan A. Camacho-Vázquez, and Sergio Isahí Garrido-Castañeda", es: "Interpretable Human Activity Recognition for Subtle Robbery Detection in Surveillance Videos — Bryan Jhoan Cazáres Leyva et al." },
+        { time: "12:20 - 12:40", en: "Tree Crown Segmentation in UAV RGB Images via Monocular Depth Estimation — Sergio Adán-Juárez, Andrea Magadán-Salazar, J. Fuentes-Pacheco, Raúl Pinto-Elías, and J. Tavira-Villanueva", es: "Tree Crown Segmentation in UAV RGB Images via Monocular Depth Estimation — Sergio Adán-Juárez et al." },
+        { time: "12:40 - 13:00", en: "UAV Pose Estimation in Low-Light Conditions Using Visual–LiDar Fusion — Esteban Tlelo-Coyotecatl, Alejandro Gutiérrez-Giles, and José Martínez-Carranza", es: "UAV Pose Estimation in Low-Light Conditions Using Visual–LiDar Fusion — Esteban Tlelo-Coyotecatl et al." },
         { time: "13:00 - 13:30", en: "Closing Ceremony", es: "Ceremonia de clausura" },
         { time: "13:30 - 15:00", en: "Lunch", es: "Comida" },
       ],
@@ -145,9 +180,9 @@ function HomeContent() {
       day: { en: "Saturday, June 27", es: "Sabado, 27 de junio" },
       schedule: [
         { time: "8:30 - 9:00", en: "Registration", es: "Registro" },
-        { time: "9:00 - 11:30", en: "Tutorial 1: Understanding Modern NLP Techniques (Prof. Humberto de Jesus Ochoa Dominguez) | Tutorial 2: Neuromorphic Computing for Edge AI (Prof. Victor Hugo Ponce Ponce) | Tutorial 3: Robot Modeling and Control (Prof. Elsa Rubio Espino)", es: "Tutorial 1: Understanding Modern NLP Techniques (Prof. Humberto de Jesus Ochoa Dominguez) | Tutorial 2: Neuromorphic Computing for Edge AI (Prof. Victor Hugo Ponce Ponce) | Tutorial 3: Robot Modeling and Control (Prof. Elsa Rubio Espino)" },
+        { time: "9:00 - 11:30", en: "Tutorial 1: Understanding Modern NLP Techniques (Prof. Humberto de Jesús Ochoa Domínguez) | Tutorial 2: Neuromorphic Computing for Edge AI (Prof. Victor Hugo Ponce Ponce) | Tutorial 3: Robot Modeling and Control (Prof. Elsa Rubio Espino, CIC-IPN)", es: "Tutorial 1: Understanding Modern NLP Techniques (Prof. Humberto de Jesús Ochoa Domínguez) | Tutorial 2: Neuromorphic Computing for Edge AI (Prof. Victor Hugo Ponce Ponce) | Tutorial 3: Robot Modeling and Control (Prof. Elsa Rubio Espino, CIC-IPN)" },
         { time: "11:30 - 11:45", en: "Coffee Break", es: "Receso de cafe" },
-        { time: "11:45 - 13:30", en: "Tutorial continuation sessions", es: "Continuacion de sesiones de tutorial" },
+        { time: "11:45 - 13:30", en: "Tutorial continuation sessions (Tutorial 1 | Tutorial 2 | Tutorial 3)", es: "Continuacion de sesiones de tutorial (Tutorial 1 | Tutorial 2 | Tutorial 3)" },
         { time: "13:30 - 14:50", en: "Lunch", es: "Comida" },
       ],
     },
@@ -328,17 +363,203 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
         },
       ],
     },
+    {
+      name: "David da Vinci (Edgar David Camacho Flores)",
+      image: "./people/david_da_vinci.jpg",
+      title: {
+        en: "Human Industry 4.0: Meaningful Innovation for New Generations",
+        es: "Industria Humana 4.0: innovacion con sentido para nuevas generaciones",
+      },
+      role: {
+        en: "Science Communicator, Writer, Teacher, and Young Entrepreneur",
+        es: "Divulgador cientifico, escritor, docente y joven emprendedor",
+      },
+      description: {
+        en: `David da Vinci (Edgar David Camacho Flores) is a 10-year-old boy from Mexico who is learning to be a polymath, an entrepreneur, and one of the most inspiring young voices in Mexico when it comes to meaningful innovation.
+
+He came up with the idea of "Human Industry 4.0," a vision that brings together artificial intelligence, emotional intelligence, and human growth to create new generations that are more aware, skilled, and ready for the future.
+
+From a really young age, David found his love for learning and making things. Now, he is a science communicator, teacher, writer, and entrepreneur, sharing ideas about STEAM, emotional intelligence, purposeful technology, and kids' rights.
+
+He wrote the book "How far would you go for your passion?", which encourages girls, boys, young people, and adults to find their purpose and grow their potential from a young age.
+
+He is the creator of Macayos, an IP (intellectual property) and educational platform fueled by artificial intelligence, aimed at helping girls, boys, and young people learn to understand and manage their emotions while building a life filled with well-being and purpose.
+
+He is also the founder of GenIA, a meaningful generative artificial intelligence academy aimed at teaching new generations how to use technology in an ethical, creative, and thoughtful way.
+
+With a love for space science, languages, and the performing arts, he has taken part in musical theater, television, and digital projects, crafting educational content that is fun, easy to understand, and truly connects with people.
+
+His journey starts with a personal challenge that turned into a mission: to support the well-being, safety, and overall growth of children and young people.
+
+Through his work, he encourages values like empathy, discipline, curiosity, resilience, and taking meaningful action.
+
+Today, David da Vinci is not just working on projects, he is planting the seeds for a fresh way to think about education, technology, and leadership around the globe.`,
+        es: `David da Vinci (Edgar David Camacho Flores) es un nino mexicano de 10 anos que se esta formando como polimata, emprendedor y una de las voces jovenes mas inspiradoras en Mexico cuando se trata de innovacion con sentido.
+
+Es creador de la idea de "Industria Humana 4.0", una vision que integra inteligencia artificial, inteligencia emocional y desarrollo humano para formar nuevas generaciones mas conscientes, capacitadas y preparadas para el futuro.
+
+Desde muy pequeno, David descubrio su pasion por aprender y crear. Hoy es divulgador cientifico, docente, escritor y emprendedor, compartiendo ideas sobre STEAM, inteligencia emocional, tecnologia con proposito y derechos de la infancia.
+
+Es autor del libro "How far would you go for your passion?", que inspira a ninas, ninos, jovenes y personas adultas a encontrar su proposito y desarrollar su potencial desde edades tempranas.
+
+Es creador de Macayos, una propiedad intelectual y plataforma educativa impulsada por inteligencia artificial, enfocada en ayudar a ninas, ninos y jovenes a comprender y gestionar sus emociones mientras construyen una vida con bienestar y sentido.
+
+Tambien es fundador de GenIA, una academia de inteligencia artificial generativa con enfoque humano que ensena a nuevas generaciones a usar la tecnologia de forma etica, creativa y reflexiva.
+
+Con gran interes por la ciencia espacial, los idiomas y las artes escenicas, ha participado en teatro musical, television y proyectos digitales, creando contenido educativo divertido, claro y cercano para diferentes audiencias.
+
+Su trayectoria surge de un reto personal que se transformo en mision: impulsar el bienestar, la seguridad y el desarrollo integral de la infancia y la juventud.
+
+A traves de su trabajo promueve valores como la empatia, la disciplina, la curiosidad, la resiliencia y la accion con sentido.
+
+Hoy, David da Vinci no solo trabaja en proyectos: esta sembrando una nueva forma de pensar la educacion, la tecnologia y el liderazgo a nivel global.`,
+      },
+      highlights: [
+        {
+          en: "Creator of the Human Industry 4.0 vision",
+          es: "Creador de la vision Industria Humana 4.0",
+        },
+        {
+          en: "Founder of GenIA, an ethical and creative AI academy for new generations",
+          es: "Fundador de GenIA, academia de IA etica y creativa para nuevas generaciones",
+        },
+        {
+          en: "Creator of Macayos, an AI-powered educational IP and platform",
+          es: "Creador de Macayos, propiedad intelectual y plataforma educativa impulsada por IA",
+        },
+        {
+          en: "Author of How far would you go for your passion?",
+          es: "Autor de How far would you go for your passion?",
+        },
+        {
+          en: "Young communicator of STEAM, emotional intelligence, and children's rights",
+          es: "Joven divulgador de STEAM, inteligencia emocional y derechos de la infancia",
+        },
+      ],
+    },
+    {
+      name: "Mtra. Elizabeth Burrola Melendez",
+      image: "./people/elizabeth_burrola.png",
+      title: {
+        en: "Technology with Purpose: Institutional Leadership and Public Innovation",
+        es: "Tecnologia con proposito: liderazgo institucional e innovacion publica",
+      },
+      role: {
+        en: "Director, Centro de Innovacion e Integracion de Tecnologias Avanzadas (CIITA-IPN)",
+        es: "Directora, Centro de Innovacion e Integracion de Tecnologias Avanzadas (CIITA-IPN)",
+      },
+      description: {
+        en: `Senior public administration executive with broad experience in institutional management, internal control, auditing, budget evaluation, quality management systems, and higher education administration.
+
+She has led initiatives to strengthen organizational processes, improve operational efficiency, and ensure regulatory compliance while coordinating multidisciplinary teams toward strategic goals.
+
+She currently serves as Director of CIITA from the National Polytechnic Institute.` ,
+        es: `Ejecutiva senior de administracion publica con amplia experiencia en gestion institucional, control interno, auditoria, evaluacion presupuestal, sistemas de gestion de calidad y administracion de educacion superior.
+
+Ha liderado iniciativas para fortalecer procesos organizacionales, mejorar la eficiencia operativa y asegurar el cumplimiento normativo, coordinando equipos multidisciplinarios hacia objetivos estrategicos.
+
+Actualmente se desempena como Directora del CIITA del Instituto Politecnico Nacional.`,
+      },
+      highlights: [
+        {
+          en: "Director, CIITA-IPN (2024-present)",
+          es: "Directora, CIITA-IPN (2024-a la fecha)",
+        },
+        {
+          en: "Former Academic Director, Universidad Tecnologica de Camargo (2021-2023)",
+          es: "Ex Directora Academica, Universidad Tecnologica de Camargo (2021-2023)",
+        },
+        {
+          en: "Former Technical Coordinator, Secretaria de la Funcion Publica (2021)",
+          es: "Ex Coordinadora Tecnica, Secretaria de la Funcion Publica (2021)",
+        },
+      ],
+    },
+    {
+      name: "Mtro. Orlando Daniel Avitia",
+      image: "./people/orlando_avitia.jpg",
+      title: {
+        en: "AI Fluency and Talent Development for the Borderplex Region",
+        es: "Fluidez en IA y desarrollo de talento para la region Borderplex",
+      },
+      role: {
+        en: "Regional Director Zona Norte, CECyTECH / Co-Founder and CEO, SinergiX Talent Development",
+        es: "Director Regional Zona Norte, CECyTECH / Cofundador y CEO, SinergiX Talent Development",
+      },
+      description: {
+        en: `Educational leader and AI specialist with more than 16 years of experience across the educational, industrial, and social sectors in the Borderplex region.
+
+He leads AI literacy, growth mindset, and technology adoption programs for executives, teachers, HR teams, and plant operators, and has trained over 215 teachers in applied AI for education.
+
+He has also promoted strategic initiatives such as Juarez IA Fluency and Juarez Skills+ to strengthen regional innovation and workforce development.` ,
+        es: `Lider educativo y especialista en inteligencia artificial con mas de 16 anos de trayectoria en el sector educativo, industrial y social de la region Borderplex.
+
+Lidera programas de alfabetizacion en IA, mentalidad de crecimiento y adopcion tecnologica para directivos, docentes, equipos de RR.HH. y operarios, y ha capacitado a mas de 215 docentes en IA aplicada a la educacion.
+
+Tambien ha impulsado iniciativas estrategicas como Juarez IA Fluency y Juarez Skills+ para fortalecer la innovacion regional y el desarrollo del talento.`,
+      },
+      highlights: [
+        {
+          en: "Regional Director Zona Norte, CECyTECH",
+          es: "Director Regional Zona Norte, CECyTECH",
+        },
+        {
+          en: "Co-Founder and CEO, SinergiX Talent Development",
+          es: "Cofundador y CEO, SinergiX Talent Development",
+        },
+        {
+          en: "Leader of Juarez IA Fluency and strategic semiconductor initiatives",
+          es: "Impulsor de Juarez IA Fluency e iniciativas estrategicas en semiconductores",
+        },
+      ],
+    },
+    {
+      name: "Ing. Javier Acosta",
+      image: "./people/Javier-Acosta.jpg",
+      title: {
+        en: "Industrial AI in Manufacturing: Automation, Vision, and Traceability",
+        es: "IA industrial en manufactura: automatizacion, vision y trazabilidad",
+      },
+      role: {
+        en: "Founder, Mechatronics AI",
+        es: "Fundador, Mechatronics AI",
+      },
+      description: {
+        en: `Founder of Mechatronics AI and specialist in industrial artificial intelligence for manufacturing, with more than 20 years of experience in industrial automation, robotics, and production processes.
+
+He is the inventor of Traceability 4.0, ArVision, and Humantronic solutions, focused on transforming legacy equipment into intelligent systems and improving quality and productivity in assembly lines.` ,
+        es: `Fundador de Mechatronics AI y especialista en inteligencia artificial industrial para manufactura, con mas de 20 anos de experiencia en automatizacion industrial, robotica y procesos de produccion.
+
+Es inventor de soluciones como Traceability 4.0, ArVision y Humantronic, enfocadas en transformar equipos legacy en sistemas inteligentes y mejorar calidad y productividad en lineas de ensamble.`,
+      },
+      highlights: [
+        {
+          en: "Founder, Mechatronics AI",
+          es: "Fundador, Mechatronics AI",
+        },
+        {
+          en: "Inventor of Traceability 4.0 and ArVision systems",
+          es: "Inventor de los sistemas Traceability 4.0 y ArVision",
+        },
+        {
+          en: "Expert in industrial automation, robotics, and manufacturing AI",
+          es: "Experto en automatizacion industrial, robotica e IA para manufactura",
+        },
+      ],
+    },
   ];
 
   const navItems = [
     { id: "home", label: { en: "Home", es: "Inicio" } },
+    { id: "live-transmission", label: { en: "Live transmission", es: "Transmisión en vivo" } },
     { id: "call-for-papers", label: { en: "Call for papers", es: "Convocatoria" } },
     { id: "paper-awards", label: { en: "Paper awards", es: "Premios" } },
-    { id: "keynote-speakers", label: { en: "Keynote speakers", es: "Conferencistas" } },
+    { id: "keynote-speakers", label: { en: "Keynote speakers and panelists", es: "Conferencistas y panelistas" } },
     { id: "students-meeting", label: { en: "Student's meeting", es: "Reunion estudiantil" } },
     { id: "program-committee", label: { en: "Program committee", es: "Comite de programa" } },
     { id: "organization", label: { en: "Organization", es: "Organizacion" } },
     { id: "conference-proceedings", label: { en: "Conference proceedings", es: "Memorias" } },
+    { id: "fees", label: { en: "Fees", es: "Costos" } },
   ];
 
   const callTopics = [
@@ -761,52 +982,6 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
       );
     }
 
-    if (activeSection === "panels") {
-      return (
-        <section className="panels-section">
-          <header className="panels-header">
-            <p>{tr("MCPR 2026 Panels", "Paneles MCPR 2026")}</p>
-            <h2>{tr("Panelists MCPR 2026", "Panelistas MCPR 2026")}</h2>
-          </header>
-
-          <div className="panels-list">
-            {panels.map((panel) => (
-              <article key={panel.name} className="surface panel-card">
-                <aside className="panel-speaker">
-                  <div className="panel-photo-wrap">
-                    <Image
-                      src={panel.image}
-                      alt={panel.name}
-                      width={240}
-                      height={240}
-                      className="panel-photo"
-                    />
-                  </div>
-                  <h3>{panel.name}</h3>
-                  <p className="panel-role">{panel.role[language]}</p>
-                </aside>
-
-                <div className="panel-content">
-                  <h2>{panel.title[language]}</h2>
-
-                  {panel.description[language].split("\n\n").map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-
-                  <h3>{tr("Highlights:", "Logros:")}</h3>
-                  <ul>
-                    {panel.highlights.map((highlight) => (
-                      <li key={highlight.en}>{highlight[language]}</li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      );
-    }
-
     if (activeSection === "program") {
       const toggleProgramDay = (dayId: string) => {
         setExpandedProgramDays((prev) => ({
@@ -987,46 +1162,114 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
 
     if (activeSection === "keynote-speakers") {
       return (
-        <section className="keynote-list" aria-label="Keynote speakers list">
-          {keynoteSpeakers.map((speaker) => (
-            <article key={speaker.name} className="surface keynote-card">
-              <h2>{speaker.title[language]}</h2>
+        <section className="panels-section" aria-label="Keynote speakers and panelists">
+          <header className="panels-header">
+            <p>{tr("MCPR 2026", "MCPR 2026")}</p>
+            <h2>{tr("Keynote speakers and panelists", "Conferencistas y panelistas")}</h2>
+          </header>
 
+          <div className="accordion-list">
+            {keynoteSpeakers.map((speaker) => {
+              const isOpen = !!expandedPeople[`keynote-${speaker.name}`];
+              return (
+                <article key={speaker.name} className="surface accordion-card">
+                  <button
+                    type="button"
+                    className="accordion-trigger"
+                    aria-expanded={isOpen}
+                    onClick={() => togglePerson(`keynote-${speaker.name}`)}
+                  >
+                    <div className="accordion-summary">
+                      <div className="accordion-avatar">
+                        {speaker.image ? (
+                          <Image
+                            src={speaker.image}
+                            alt={speaker.name}
+                            width={72}
+                            height={72}
+                            style={{ width: 72, height: 72, objectFit: "cover", borderRadius: "50%", display: "block" }}
+                          />
+                        ) : (
+                          <span>{speaker.initials}</span>
+                        )}
+                      </div>
+                      <div className="accordion-summary-text">
+                        <h3 className="accordion-name">{speaker.name}</h3>
+                        <p className="accordion-sub">{speaker.affiliation[language]}</p>
+                        <p className="accordion-title-preview">{speaker.title[language]}</p>
+                      </div>
+                    </div>
+                    <span className="accordion-chevron" aria-hidden="true">{isOpen ? "▲" : "▼"}</span>
+                  </button>
 
-              <div className="speaker-head">
-                <div className="speaker-avatar" aria-hidden="true">
-                  {speaker.image ? (
-                    <Image
-                      src={speaker.image}
-                      alt={speaker.name}
-                      width={100}
-                      height={100}
-                      className="profile-photo"
-                    />
-                  ) : (
-                    speaker.initials
+                  {isOpen && (
+                    <div className="accordion-body">
+                      <p className="accordion-full-title">{speaker.title[language]}</p>
+                      <div className="speaker-text-block">
+                        <strong>{tr("Conference abstract:", "Resumen de la conferencia:")}</strong>
+                        {speaker.abstract[language].split("\n\n").map((paragraph) => (
+                          <p key={paragraph}>{paragraph}</p>
+                        ))}
+                      </div>
+                      <div className="speaker-text-block">
+                        <strong>{tr("Speaker biography:", "Biografía del ponente:")}</strong>
+                        {speaker.biography[language].split("\n\n").map((paragraph) => (
+                          <p key={paragraph}>{paragraph}</p>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                </div>
-                <div>
-                  <h3>{speaker.name}</h3>
-                  <p>{speaker.affiliation[language]}</p>
-                </div>
-              </div>
+                </article>
+              );
+            })}
 
-              <div className="speaker-text-block">
-                <strong>{tr("Conference abstract:", "Resumen de la conferencia:")}</strong>
-                {speaker.abstract[language].split("\n\n").map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-              <div className="speaker-text-block">
-                <strong>{tr("Speaker biography:", "Biografía del ponente:")}</strong>
-                {speaker.biography[language].split("\n\n").map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            </article>
-          ))}
+            {panels.map((panel) => {
+              const isOpen = !!expandedPeople[`panel-${panel.name}`];
+              return (
+                <article key={panel.name} className="surface accordion-card">
+                  <button
+                    type="button"
+                    className="accordion-trigger"
+                    aria-expanded={isOpen}
+                    onClick={() => togglePerson(`panel-${panel.name}`)}
+                  >
+                    <div className="accordion-summary">
+                      <div className="accordion-avatar accordion-avatar--panel">
+                        <Image
+                          src={panel.image}
+                          alt={panel.name}
+                          width={72}
+                          height={72}
+                          style={{ width: 72, height: 72, objectFit: "cover", borderRadius: "50%", display: "block" }}
+                        />
+                      </div>
+                      <div className="accordion-summary-text">
+                        <h3 className="accordion-name">{panel.name}</h3>
+                        <p className="accordion-sub">{panel.role[language]}</p>
+                        <p className="accordion-title-preview">{panel.title[language]}</p>
+                      </div>
+                    </div>
+                    <span className="accordion-chevron" aria-hidden="true">{isOpen ? "▲" : "▼"}</span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="accordion-body">
+                      <p className="accordion-full-title">{panel.title[language]}</p>
+                      {panel.description[language].split("\n\n").map((paragraph) => (
+                        <p key={paragraph} className="accordion-body-text">{paragraph}</p>
+                      ))}
+                      <h4 className="accordion-highlights-label">{tr("Highlights:", "Logros:")}</h4>
+                      <ul className="accordion-highlights">
+                        {panel.highlights.map((highlight) => (
+                          <li key={highlight.en}>{highlight[language]}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
         </section>
       );
     }
@@ -1067,6 +1310,11 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
             <li>Student without accepted paper: $(pending) Mexican pesos</li>
             <li>Fees includes entry to all the talks and tutorials of MCPR</li>
           </ul>
+          <p>
+            <a className="fees-download-link" href="docs/registrationFormMCPR2026.pdf" download>
+              {tr("Download registration form (PDF)", "Descargar formato de registro (PDF)")}
+            </a>
+          </p>
 
           <h3>{tr("Topics", "Temas")}</h3>
           <div className="topics-columns">
@@ -1395,6 +1643,81 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
       );
     }
 
+    if (activeSection === "live-transmission") {
+      return (
+        <article className="surface page-block simple-content-block">
+          <h2>{tr("Live transmission", "Transmisión en vivo")}</h2>
+          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", maxWidth: "100%", backgroundColor: "#000" }}>
+            <iframe
+              src="https://www.youtube.com/embed/qrE0mHj0zso?autoplay=1"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="MCPR 2026 Live Transmission"
+            />
+          </div>
+          <p style={{ marginTop: "1.5rem" }}>
+            {tr(
+              "Watch the live transmission of the MCPR 2026 conference.",
+              "Mira la transmisión en vivo de la conferencia MCPR 2026."
+            )}
+          </p>
+        </article>
+      );
+    }
+
+    if (activeSection === "fees") {
+      return (
+        <article className="surface page-block simple-content-block">
+          <h2>{tr("Fees for Authors and Registration", "Cuotas para autores y registro")}</h2>
+          <p>
+            {tr(
+              "Registration fees are listed below for IAPR members and non-IAPR members.",
+              "A continuación se muestran las cuotas de registro para miembros de IAPR y no miembros de IAPR."
+            )}
+          </p>
+
+          <div className="committee-table-wrap">
+            <table className="committee-table">
+              <thead>
+                <tr>
+                  <th>{tr("Registration type", "Tipo de registro")}</th>
+                  <th>{tr("IAPR members", "Miembros IAPR")}</th>
+                  <th>{tr("Non-IAPR members", "No miembros IAPR")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>{tr("Early Registration", "Registro anticipado")}</strong>
+                    <br />
+                    <span>{tr("(before June 12th, 2025)", "(antes del 12 de junio de 2025)")}</span>
+                  </td>
+                  <td>$450 USD</td>
+                  <td>$475 USD</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>{tr("Late Registration", "Registro tardio")}</strong>
+                    <br />
+                    <span>{tr("(after June 12th, 2025)", "(despues del 12 de junio de 2025)")}</span>
+                  </td>
+                  <td>$500 USD</td>
+                  <td>$525 USD</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="fees-download-wrap">
+            <a className="fees-download-link" href="docs/registrationFormMCPR2026.pdf" download>
+              {tr("Download registration form (PDF)", "Descargar formato de registro (PDF)")}
+            </a>
+          </p>
+        </article>
+      );
+    }
+
     return (
       <article className="surface page-block placeholder-block">
         <h2>Section coming soon</h2>
@@ -1520,14 +1843,32 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
               type="button"
               className="program-action-button"
               onClick={() => {
-                navigateToSection("panels");
+                navigateToSection("keynote-speakers");
                 setIsPreviousMenuOpen(false);
               }}
             >
-              {tr("Panels MCPR 2026", "Paneles MCPR 2026")}
+              {tr("Keynote speakers and panelists", "Conferencistas y panelistas")}
             </button>
+            <p className="mini-note">{tr("Conference proceedings:", "Memorias de la conferencia:")}</p>
+            <a
+              href="https://link.springer.com/book/10.1007/978-3-032-28393-1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="program-action-button"
+              style={{ display: "block", textAlign: "center", textDecoration: "none" }}
+            >
+              {tr("MCPR 2026 Proceedings (Springer)", "Memorias MCPR 2026 (Springer)")}
+            </a>
             <p className="mini-note">{tr("Access links to the virtual conference:", "Acceso a enlaces de la conferencia virtual:")}</p>
-            <button type="button">{tr("Coming soon!", "Proximamente!")}</button>
+            <button
+              type="button"
+              onClick={() => {
+                navigateToSection("live-transmission");
+                setIsPreviousMenuOpen(false);
+              }}
+            >
+              {tr("Live transmission", "Transmisión en vivo")}
+            </button>
           </section>
 
           <section className="surface side-card accent-contrib">
@@ -1641,27 +1982,79 @@ Luis fue nombrado Mejor Roboticista de México 2023 por The Valerio Foundation y
 
           <section className="surface side-card accent-sponsor">
             <h3>{tr("Sponsor", "Patrocinador")}</h3>
-            <div className="media-box media-box-image">
-              <a
-                href="https://durol.com.mx/page/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src="./sponsors/durol.jpg"
-                  alt="DUROL"
-                  width={280}
-                  height={120}
-                  className="sponsor-card-logo"
-                />
-              </a>
+            <div className="sponsor-carousel-box">
+              <div className="sponsor-carousel">
+                <a
+                  href={SPONSOR_ITEMS[activeSponsorIndex].href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="sponsor-card-item"
+                >
+                  <Image
+                    src={SPONSOR_ITEMS[activeSponsorIndex].src}
+                    alt={SPONSOR_ITEMS[activeSponsorIndex].alt}
+                    width={280}
+                    height={120}
+                    className="sponsor-card-logo"
+                  />
+                </a>
+                <div className="sponsor-carousel-controls">
+                  <button
+                    type="button"
+                    className="sponsor-carousel-arrow"
+                    onClick={() =>
+                      setActiveSponsorIndex(
+                        (current) =>
+                          (current - 1 + SPONSOR_ITEMS.length) % SPONSOR_ITEMS.length,
+                      )
+                    }
+                    aria-label={tr("Previous sponsor", "Patrocinador anterior")}
+                  >
+                    &lt;
+                  </button>
+                  <div className="sponsor-carousel-dots" role="tablist" aria-label={tr("Sponsor carousel", "Carrusel de patrocinadores")}>
+                    {SPONSOR_ITEMS.map((sponsor, index) => (
+                      <button
+                        key={sponsor.href}
+                        type="button"
+                        className={`sponsor-carousel-dot ${index === activeSponsorIndex ? "is-active" : ""}`}
+                        onClick={() => setActiveSponsorIndex(index)}
+                        aria-label={`${tr("Go to sponsor", "Ir al patrocinador")} ${index + 1}`}
+                        aria-current={index === activeSponsorIndex}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="sponsor-carousel-arrow"
+                    onClick={() =>
+                      setActiveSponsorIndex(
+                        (current) => (current + 1) % SPONSOR_ITEMS.length,
+                      )
+                    }
+                    aria-label={tr("Next sponsor", "Siguiente patrocinador")}
+                  >
+                    &gt;
+                  </button>
+                </div>
+              </div>
             </div>
             <p className="sponsor-note">{tr("Click on the image for more information.", "Haz clic en la imagen para mas informacion.")}</p>
           </section>
         </aside>
       </main>
 
-      <footer className="credit">Desing and made by Blak</footer>
+      <footer className="credit">
+        Desing and made by {" "}
+        <a
+          href="https://www.blak.com.mx/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="credit-link"
+        >
+          Blak
+        </a>
+      </footer>
     </div>
   );
 }
