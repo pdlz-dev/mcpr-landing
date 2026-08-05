@@ -1649,7 +1649,7 @@ Es inventor de soluciones como Traceability 4.0, ArVision y Humantronic, enfocad
           <h2>{tr("Live transmission", "Transmisión en vivo")}</h2>
           <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", maxWidth: "100%", backgroundColor: "#000" }}>
             <iframe
-              src="https://www.youtube.com/embed/qrE0mHj0zso?autoplay=1"
+              src="https://www.youtube.com/embed/rBn95zaXApU?autoplay=1"
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
