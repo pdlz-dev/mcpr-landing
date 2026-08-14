@@ -2,7 +2,7 @@ Steps to deploy in SSH:
 
 npm build
 open powershell
-scp -P 8312 -r .\out\* [direction]@[filedirection] example: scp -P 8312 -r .\out\* mcpr@ccc.inaoep.mx:/home/mcpr/public_html/
+scp -P 8312 -r .\out\* [direction]@[filedirection] example: scp -P 8312 -r .\out\* mcpr2027@ccc.inaoep.mx:/home/mcpr2027/public_html/
 
 ssh mcpr2027@ccc.inaoep.mx -p 8312
 Cic.mcpr.27
