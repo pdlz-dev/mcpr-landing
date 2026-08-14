@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MCPR 2026 | Conference Landing",
-  description: "Redesigned landing page for the Mexican Conference on Pattern Recognition 2026.",
+  title: "MCPR 2027 | Conference Landing",
+  description: "Redesigned landing page for the Mexican Conference on Pattern Recognition 2027.",
 };
 
 export default function RootLayout({
