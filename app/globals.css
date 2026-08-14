@@ -316,6 +316,41 @@ body {
   line-height: 1.62;
 }
 
+.awards-winners {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0 0 1.4rem;
+}
+
+.award-winner {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 4px solid var(--brand);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.award-winner h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--brand-strong);
+}
+
+.awards-block .award-authors {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.awards-block .award-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-style: italic;
+  opacity: 0.85;
+}
+
 .placeholder-block p {
   text-align: center;
   font-size: 0.98rem;

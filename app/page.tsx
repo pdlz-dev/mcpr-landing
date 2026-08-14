@@ -912,6 +912,37 @@ Es inventor de soluciones como Traceability 4.0, ArVision y Humantronic, enfocad
       return (
         <article className="surface page-block awards-block">
           <h2>{tr("Paper awards", "Premios de articulos")}</h2>
+
+          <div className="awards-winners">
+            <article className="award-winner">
+              <h3>MCPR-IAPR Best Paper Award</h3>
+              <p className="award-authors">
+                Carlos Antonio Olachea Hernández, Luis Villaseñor Pineda {tr("and", "y")} Manuel Montes Y Gómez
+              </p>
+              <p className="award-title">
+                Graph-Based Modeling of Disfluent Speech for Alzheimer&rsquo;s Detection
+              </p>
+            </article>
+
+            <article className="award-winner">
+              <h3>MCPR-IAPR Student Paper Award</h3>
+              <p className="award-authors">
+                Esteban Tlelo-Coyotecatl, Alejandro Gutiérrez-Giles {tr("and", "y")} José Martínez-Carranza
+              </p>
+              <p className="award-title">UAV Pose Estimation in Low-Light</p>
+            </article>
+
+            <article className="award-winner">
+              <h3>{tr("Best Poster Award", "Premio al Mejor Cartel")}</h3>
+              <p className="award-authors">
+                Iván Carvajal Carlos, Juan Luis Hernández, Edgar Martínez
+              </p>
+              <p className="award-title">
+                Bio-Inspired Soft Skeleton: Cybernetic Control for Posture Classification
+              </p>
+            </article>
+          </div>
+
           <p>
             {tr(
               "The MCPR-IAPR Best Paper Award and MCPR-IAPR Student Paper Award winners will be invited to send extended papers to the special section devoted to MCPR in the \"Pattern Recognition Letters\" Journal.",
