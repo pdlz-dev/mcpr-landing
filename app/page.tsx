@@ -688,7 +688,13 @@ function HomeContent() {
 
   return (
     <div className="conference-page">
-      <header className="hero">
+      <header
+        className="hero"
+        style={{
+          backgroundImage:
+            "linear-gradient(120deg, rgb(19 39 63 / 34%), rgb(47 75 112 / 20%)), url('./img/cic.jpg')",
+        }}
+      >
         <div className="hero-overlay" />
         <div className="hero-content">
           <p className="hero-kicker">{tr("Mexican Conference on Pattern Recognition", "Conferencia Mexicana de Reconocimiento de Patrones")}</p>

@@ -46,9 +46,8 @@ body {
 .hero {
   position: relative;
   min-height: 380px;
-  background:
-    linear-gradient(120deg, rgb(19 39 63 / 34%), rgb(47 75 112 / 20%)),
-    url("/~mcpr/img/cic.jpg");
+  /* background-image is set inline in page.tsx with a relative URL so it
+     resolves against the document, independent of the deployment basePath. */
   background-color: #15263d;
   background-size: cover;
   background-position: center center;
