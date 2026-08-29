@@ -120,7 +120,7 @@ function HomeContent() {
   ];
 
   const timelineItems = [
-    { title: "Submission deadline", date: "February 22, 2027" },
+    { title: "Submission deadline", date: "January 31, 2027" },
     { title: "Notification", date: "April 8, 2027" },
     { title: "Camera-ready due", date: "April 10, 2027" },
     { title: "Early bird registration", date: "April 24, 2027" },
@@ -164,21 +164,35 @@ function HomeContent() {
     { date: "June 22nd-25th, 2027", label: "Postgraduate Students&apos; meeting" },
   ];
 
+  // TODO: add "Elsa Rubio Espino, CIC - IPN" once she confirms her participation.
   const psmCommittee = [
-    "Vianey Guadalupe Cruz Sanchez, UACJ",
-    "Osslan Osiris Vergara Villegas, UACJ",
-    "Juan Humberto Sossa Azuela, CIC - IPN",
-    "Jesus Ariel Carrasco Ochoa, INAOE, Mex",
-    "Jose Francisco Martinez Trinidad, INAOE, Mex",
     "Jose Arturo Olvera Lopez, BUAP",
+    "Juan Humberto Sossa Azuela, CIC - IPN",
+    "Osslan Osiris Vergara Villegas, UACJ",
+    "Jesus A. Carrasco Ochoa, INAOE, Mexico",
+    "Jose F. Martinez Trinidad, INAOE, Mexico",
   ];
 
+  // TODO: add { name: "Elsa Rubio Espino", affiliation: "CIC-IPN, Mexico", initials: "ER",
+  // image: "./people/elsa_rubio.jpeg" } once she confirms her participation.
   const committeeChairs = [
+    { name: "Juan H. Sossa Azuela", affiliation: "CIC-IPN, Mexico", initials: "JS", image: "./people/humberto_sossa.jpeg" },
     { name: "Osslan O. Vergara Villegas", affiliation: "UACJ, Mexico", initials: "OV", image: "./people/osslan_vergara.png" },
-    { name: "Juan H. Sossa Azuela", affiliation: "CIC-IPN, Mexico", initials: "JS", image: "./people/huberto_sossa.jpg" },
-    { name: "Jesus A. Carrasco Ochoa", affiliation: "INAOE, Mexico", initials: "JC", image: "./people/jesus_carrasco.jpg" },
-    { name: "Jose F. Martinez Trinidad", affiliation: "INAOE, Mexico", initials: "JM", image: "./people/jose_martinez.jpg" },
-    { name: "Jose A. Olvera Lopez", affiliation: "BUAP, Mexico", initials: "JO", image: "./people/jose_olvera.jpg" },
+  ];
+
+  // TODO: add "Elsa Rubio Espino, CIC - IPN" to organizingCommittee once she confirms.
+  const organizingCommittee = [
+    "Juan Humberto Sossa Azuela, CIC - IPN",
+    "Osslan Osiris Vergara Villegas, UACJ",
+    "Jesus A. Carrasco Ochoa, INAOE, Mexico",
+    "Jose F. Martinez Trinidad, INAOE, Mexico",
+    "Jose A. Olvera Lopez, BUAP, Mexico",
+  ];
+
+  const steeringCommittee = [
+    "Jesus A. Carrasco Ochoa, INAOE, Mexico",
+    "Jose F. Martinez Trinidad, INAOE, Mexico",
+    "Jose A. Olvera Lopez, BUAP, Mexico",
   ];
 
   const previousMcprLinks = [
@@ -314,8 +328,8 @@ function HomeContent() {
             </p>
             <p>
               {tr(
-                "Accepted papers will appear in the conference proceedings, published in Springer's LNCS series. The papers should be prepared following the authors' guidelines provided by Springer and adhering to the Code of Conduct of the Editorial. Submission implies that at least one author is willing to register and present the conference communication if it is accepted.",
-                "Los articulos aceptados apareceran en las memorias de la conferencia, publicadas en la serie LNCS de Springer. Los trabajos deben prepararse siguiendo las guias para autores de Springer y respetando el codigo editorial. El envio implica que al menos un autor se compromete a registrarse y presentar el trabajo en caso de ser aceptado."
+                "In line with previous editions, accepted papers are expected to be published in the conference proceedings as part of the Springer LNCS series. The papers should be prepared following the authors' guidelines provided by Springer and adhering to the Code of Conduct of the Editorial. Submission implies that at least one author is willing to register and present the conference communication if it is accepted.",
+                "En linea con ediciones anteriores, se espera que los articulos aceptados se publiquen en las memorias de la conferencia como parte de la serie LNCS de Springer. Los trabajos deben prepararse siguiendo las guias para autores de Springer y respetando el codigo editorial. El envio implica que al menos un autor se compromete a registrarse y presentar el trabajo en caso de ser aceptado."
               )}
             </p>
           </section>
@@ -483,18 +497,39 @@ function HomeContent() {
 
     if (activeSection === "organization") {
       return (
-        <ComingSoon
-          badge={tr("Working on it", "En preparacion")}
-          title={tr("Organization", "Organizacion")}
-          message={tr(
-            "The full MCPR 2027 organizing committee will be published soon.",
-            "El comite organizador completo de MCPR 2027 se publicara proximamente."
-          )}
-          note={tr(
-            "Questions? Write to mcpr2027@inaoep.mx",
-            "Dudas? Escribenos a mcpr2027@inaoep.mx"
-          )}
-        />
+        <article className="surface page-block organization-block">
+          <h2>{tr("Organization", "Organizacion")}</h2>
+
+          <div className="organization-grid">
+            <section className="organization-card">
+              <h3>{tr("Organizing committee", "Comite organizador")}</h3>
+              <ul>
+                {organizingCommittee.map((member) => (
+                  <li key={member}>{member}</li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="organization-card">
+              <h3>{tr("Steering Committee", "Comite directivo")}</h3>
+              <ul>
+                {steeringCommittee.map((member) => (
+                  <li key={member}>{member}</li>
+                ))}
+              </ul>
+            </section>
+          </div>
+
+          <section className="organization-card organization-card--full">
+            <h3>{tr("Local Organizing committee", "Comite organizador local")}</h3>
+            <p className="organization-pending">
+              {tr(
+                "The local organizing committee will be announced soon.",
+                "El comite organizador local se anunciara proximamente."
+              )}
+            </p>
+          </section>
+        </article>
       );
     }
 
@@ -522,8 +557,7 @@ function HomeContent() {
           <ol className="dates-track" aria-label={tr("Conference important dates", "Fechas importantes de la conferencia")}>
             <li>
               <h3>{tr("Submission deadline", "Fecha limite de envio")}</h3>
-              <p className="muted">January 31, 2027</p>
-              <p>February 22, 2027</p>
+              <p>January 31, 2027</p>
             </li>
             <li>
               <h3>{tr("Notification", "Notificacion")}</h3>
@@ -692,7 +726,7 @@ function HomeContent() {
         className="hero"
         style={{
           backgroundImage:
-            "linear-gradient(120deg, rgb(19 39 63 / 34%), rgb(47 75 112 / 20%)), url('./img/cic.jpg')",
+            "linear-gradient(120deg, rgb(19 39 63 / 34%), rgb(47 75 112 / 20%)), url('./img/bg.jpeg')",
         }}
       >
         <div className="hero-overlay" />
@@ -761,8 +795,8 @@ function HomeContent() {
             </div>
             <div>
               <Image
-                src="./sponsors/iarp.jpg"
-                alt="IAPR"
+                src="./sponsors/cic.jpeg"
+                alt="CIC - IPN"
                 width={160}
                 height={56}
                 className="sponsor-logo"

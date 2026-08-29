@@ -492,7 +492,8 @@ body {
 
 .committee-chairs-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 240px));
+  justify-content: center;
   gap: 0.65rem;
 }
 
@@ -623,6 +624,18 @@ body {
   margin: 0.4rem 0;
   line-height: 1.4;
   font-size: 0.92rem;
+}
+
+.organization-card--full {
+  margin-top: 0.7rem;
+}
+
+.organization-pending {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
 .support-panel {
