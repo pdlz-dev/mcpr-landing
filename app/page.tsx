@@ -121,8 +121,8 @@ function HomeContent() {
 
   const timelineItems = [
     { title: "Submission deadline", date: "January 31, 2027" },
-    { title: "Notification", date: "April 8, 2027" },
-    { title: "Camera-ready due", date: "April 10, 2027" },
+    { title: "Notification", date: "March 26, 2027" },
+    { title: "Camera-ready due", date: "April 9, 2027" },
     { title: "Early bird registration", date: "April 24, 2027" },
     { title: "Main conference", date: "June 22-25, 2027" },
   ];
@@ -164,26 +164,25 @@ function HomeContent() {
     { date: "June 22nd-25th, 2027", label: "Postgraduate Students&apos; meeting" },
   ];
 
-  // TODO: add "Elsa Rubio Espino, CIC - IPN" once she confirms her participation.
   const psmCommittee = [
     "Jose Arturo Olvera Lopez, BUAP",
     "Juan Humberto Sossa Azuela, CIC - IPN",
     "Osslan Osiris Vergara Villegas, UACJ",
+    "Elsa Rubio Espino, CIC - IPN",
     "Jesus A. Carrasco Ochoa, INAOE, Mexico",
     "Jose F. Martinez Trinidad, INAOE, Mexico",
   ];
 
-  // TODO: add { name: "Elsa Rubio Espino", affiliation: "CIC-IPN, Mexico", initials: "ER",
-  // image: "./people/elsa_rubio.jpeg" } once she confirms her participation.
   const committeeChairs = [
     { name: "Juan H. Sossa Azuela", affiliation: "CIC-IPN, Mexico", initials: "JS", image: "./people/humberto_sossa.jpeg" },
+    { name: "Elsa Rubio Espino", affiliation: "CIC-IPN, Mexico", initials: "ER", image: "./people/elsa_rubio.jpeg" },
     { name: "Osslan O. Vergara Villegas", affiliation: "UACJ, Mexico", initials: "OV", image: "./people/osslan_vergara.png" },
   ];
 
-  // TODO: add "Elsa Rubio Espino, CIC - IPN" to organizingCommittee once she confirms.
   const organizingCommittee = [
     "Juan Humberto Sossa Azuela, CIC - IPN",
     "Osslan Osiris Vergara Villegas, UACJ",
+    "Elsa Rubio Espino, CIC - IPN",
     "Jesus A. Carrasco Ochoa, INAOE, Mexico",
     "Jose F. Martinez Trinidad, INAOE, Mexico",
     "Jose A. Olvera Lopez, BUAP, Mexico",
@@ -561,11 +560,11 @@ function HomeContent() {
             </li>
             <li>
               <h3>{tr("Notification", "Notificacion")}</h3>
-              <p>April 8, 2027</p>
+              <p>March 26, 2027</p>
             </li>
             <li>
               <h3>{tr("Camera-ready due", "Entrega camera-ready")}</h3>
-              <p>April 10, 2027</p>
+              <p>April 9, 2027</p>
             </li>
             <li>
               <h3>{tr("Early bird registration", "Registro temprano")}</h3>
