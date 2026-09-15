@@ -194,6 +194,57 @@ function HomeContent() {
     "Jose A. Olvera Lopez, BUAP, Mexico",
   ];
 
+  const programCommittee = [
+    { first: "Alireza", last: "Alaei", affiliation: "Southern Cross University" },
+    { first: "Francisco", last: "Antunes", affiliation: "University of Coimbra" },
+    { first: "Silvia", last: "Biasotti", affiliation: "IMATI-CNR" },
+    { first: "Dibio", last: "Borges", affiliation: "Universidade de Brasilia" },
+    { first: "John", last: "Branch", affiliation: "Universidad Nacional de Colombia" },
+    { first: "Deisy", last: "Chaves", affiliation: "Universidad del Valle" },
+    { first: "Lucia", last: "Cimmino", affiliation: "Department of Information Science and Technology, Pegaso University" },
+    { first: "Pedro", last: "Couto", affiliation: "CITAB - UTAD" },
+    { first: "Hugo Jair", last: "Escalante", affiliation: "INAOE" },
+    { first: "Jorge Ernesto", last: "Espinosa Oviedo", affiliation: "Politecnico Colombiano Jaime Isaza Cadavid" },
+    { first: "Giorgio", last: "Fumera", affiliation: "University of Cagliari" },
+    { first: "Antoni", last: "Grau", affiliation: "Universitat Politecnica de Catalunya" },
+    { first: "Laurent", last: "Heutte", affiliation: "Universite de Rouen Normandie" },
+    { first: "Mohamed", last: "Ibn Khedher", affiliation: "IRT-SystemX" },
+    { first: "Xiaoyi", last: "Jiang", affiliation: "University of Munster" },
+    { first: "Martin", last: "Kampel", affiliation: "Vienna University of Technology" },
+    { first: "Sang-Woon", last: "Kim", affiliation: "Myongji University" },
+    { first: "Vitaly", last: "Kober", affiliation: "CICESE" },
+    { first: "Manuel S.", last: "Lazo-Cortes", affiliation: "TecNM/ITTLA" },
+    { first: "Marcos A.", last: "Levano", affiliation: "Universidad Catolica de Temuco" },
+    { first: "Heber Ivan", last: "Mejia Cabrera", affiliation: "Universidad Senor de Sipan" },
+    { first: "Vladimir", last: "Milian Nunez", affiliation: "Universidad de las Ciencias Informaticas" },
+    { first: "Giorgia", last: "Minello", affiliation: "Universita Ca' Foscari di Venezia" },
+    { first: "Delia", last: "Mitrea", affiliation: "Technical University of Cluj-Napoca" },
+    { first: "Miguel", last: "Moctezuma-Flores", affiliation: "UNAM" },
+    { first: "Jose M.", last: "Molina", affiliation: "Universidad Carlos III de Madrid" },
+    { first: "Manuel", last: "Montes-Y-Gomez", affiliation: "Instituto Nacional de Astrofisica, Optica y Electronica" },
+    { first: "Eduardo", last: "Morales", affiliation: "INAOE" },
+    { first: "Agustin", last: "Moreno Canadas", affiliation: "National University of Colombia" },
+    { first: "Jakub", last: "Nalepa", affiliation: "Silesian University of Technology" },
+    { first: "Nudrat", last: "Nida", affiliation: "UET" },
+    { first: "Jose Luis", last: "Oliveira", affiliation: "University of Aveiro" },
+    { first: "Kalman", last: "Palagyi", affiliation: "University of Szeged" },
+    { first: "Joao Paulo", last: "Papa", affiliation: "UNESP - Univ Estadual Paulista" },
+    { first: "Helio", last: "Pedrini", affiliation: "Institute of Computing, University of Campinas" },
+    { first: "Pedro", last: "Pina", affiliation: "Institute of Astrophysics and Space Sciences, Department of Earth Sciences, University of Coimbra" },
+    { first: "Adrian", last: "Perez-Suay", affiliation: "University of Valencia" },
+    { first: "Pedro", last: "Real", affiliation: "Institute Mathematics of Seville University (IMUS)" },
+    { first: "Miguel", last: "Realpe", affiliation: "ESPOL" },
+    { first: "Alejandro", last: "Restrepo", affiliation: "Universidad Nacional de Colombia" },
+    { first: "Wilson", last: "Rivera", affiliation: "University of Puerto Rico" },
+    { first: "Bhuvendhraa", last: "Rudrusamy", affiliation: "Heriot-Watt University Malaysia" },
+    { first: "Robert", last: "Sablatnig", affiliation: "TU Wien" },
+    { first: "Carlo", last: "Sansone", affiliation: "University of Naples Federico II" },
+    { first: "Catarina", last: "Silva", affiliation: "University of Coimbra" },
+    { first: "Shreyanka", last: "Subbarayappa", affiliation: "M. S. Ramaiah University of Applied Sciences" },
+    { first: "Luis Enrique", last: "Sucar", affiliation: "INAOE" },
+    { first: "Marcos Eduardo", last: "Valle", affiliation: "Universidade Estadual de Campinas" },
+  ];
+
   const previousMcprLinks = [
     { label: "2026", href: "https://ccc.inaoep.mx/~mcpr2026/" },
     { label: "2025", href: "https://ccc.inaoep.mx/~mcpr2025/" },
@@ -481,15 +532,29 @@ function HomeContent() {
             </div>
           </article>
 
-          <ComingSoon
-            badge={tr("Under construction", "En construccion")}
-            title={tr("Program Committee", "Comite de Programa")}
-            message={tr(
-              "The MCPR 2027 Program Committee will be published soon.",
-              "El Comite de Programa de MCPR 2027 se publicara proximamente."
-            )}
-            compact
-          />
+          <article className="surface page-block committee-table-panel">
+            <h2>{tr("Program Committee", "Comite de Programa")}</h2>
+            <div className="committee-table-wrap">
+              <table className="committee-table">
+                <thead>
+                  <tr>
+                    <th scope="col">{tr("First name", "Nombre")}</th>
+                    <th scope="col">{tr("Last name", "Apellido")}</th>
+                    <th scope="col">{tr("Institution", "Institucion")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {programCommittee.map((member) => (
+                    <tr key={`${member.last}-${member.first}`}>
+                      <td>{member.first}</td>
+                      <td>{member.last}</td>
+                      <td>{member.affiliation}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </article>
         </section>
       );
     }
