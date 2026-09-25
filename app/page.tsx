@@ -279,8 +279,8 @@ function HomeContent() {
             <div>
               <p>
                 {tr(
-                  "The 19th Mexican Conference on Pattern Recognition (MCPR2027) will be held at the Centro de Investigacion en Computacion (CIC) of the Instituto Politecnico Nacional in Mexico City, Mexico from June 22 to June 25, 2027. This is under the direction of the Coordinacion de Ciencias Computacionales and with the consent of the Mexican Association for Pattern Recognition.",
-                  "La 19a Conferencia Mexicana de Reconocimiento de Patrones (MCPR2027) se llevara a cabo en el Centro de Investigacion en Computacion (CIC) del Instituto Politecnico Nacional, en Ciudad de Mexico, Mexico, del 22 al 25 de junio de 2027. Esta edicion se realiza bajo la direccion de la Coordinacion de Ciencias Computacionales y con el respaldo de la Asociacion Mexicana de Reconocimiento de Patrones."
+                  "The 19th Mexican Conference on Pattern Recognition (MCPR2027) will be held at the Centro de Investigacion en Computacion (CIC) of the Instituto Politecnico Nacional in Mexico City, Mexico from June 22 to June 25, 2027. This is an IAPR-endorsed event under the direction of the Coordinación de Ciencias Computacionales and with the consent of the Mexican Association for Pattern Recognition.",
+                  "La 19a Conferencia Mexicana de Reconocimiento de Patrones (MCPR2027) se llevara a cabo en el Centro de Investigacion en Computacion (CIC) del Instituto Politecnico Nacional, en Ciudad de Mexico, Mexico, del 22 al 25 de junio de 2027. Este es un evento respaldado por la IAPR, realizado bajo la direccion de la Coordinacion de Ciencias Computacionales y con el respaldo de la Asociacion Mexicana de Reconocimiento de Patrones."
                 )}
               </p>
               <p>
@@ -861,6 +861,15 @@ function HomeContent() {
               <Image
                 src="./sponsors/cic.jpeg"
                 alt="CIC - IPN"
+                width={160}
+                height={56}
+                className="sponsor-logo"
+              />
+            </div>
+            <div>
+              <Image
+                src="./sponsors/iapr.jpg"
+                alt="IAPR - International Association for Pattern Recognition"
                 width={160}
                 height={56}
                 className="sponsor-logo"
