@@ -1416,6 +1416,15 @@ function HomeContent() {
                   className="sponsor-logo"
                 />
               </div>
+              <div>
+                <Image
+                  src="./sponsors/lncs.jpg"
+                  alt="Springer Lecture Notes in Computer Science (LNCS)"
+                  width={160}
+                  height={56}
+                  className="sponsor-logo"
+                />
+              </div>
             </div>
           </div>
         </section>
