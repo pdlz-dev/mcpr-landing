@@ -716,6 +716,30 @@ body {
   margin-top: 0.9rem;
 }
 
+.submission-note a,
+.submission-guidelines-block a {
+  color: #1a56db;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.submission-note a:hover,
+.submission-guidelines-block a:hover {
+  color: #123f9e;
+}
+
+.submission-guidelines-block h2 {
+  margin-bottom: 1rem;
+}
+
+.submission-guidelines-block p {
+  max-width: 80ch;
+  margin: 0 auto 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 .logo-strip {
   margin-top: 1rem;
   background: #f6f9fc;

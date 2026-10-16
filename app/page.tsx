@@ -376,12 +376,37 @@ function HomeContent() {
                 "Todos los trabajos de 10 paginas tamano A4 deberan enviarse y presentarse en ingles. Todas las contribuciones seran evaluadas de forma ciega por tres miembros del comite cientifico, considerando originalidad, contenido tecnico y relevancia con el tema de la conferencia. La aceptacion final se basara en la revision del articulo completo."
               )}
             </p>
-            <p>
-              {tr(
-                "In line with previous editions, accepted papers are expected to be published in the conference proceedings as part of the Springer LNCS series. The papers should be prepared following the authors' guidelines provided by Springer and adhering to the Code of Conduct of the Editorial. Submission implies that at least one author is willing to register and present the conference communication if it is accepted.",
-                "En linea con ediciones anteriores, se espera que los articulos aceptados se publiquen en las memorias de la conferencia como parte de la serie LNCS de Springer. Los trabajos deben prepararse siguiendo las guias para autores de Springer y respetando el codigo editorial. El envio implica que al menos un autor se compromete a registrarse y presentar el trabajo en caso de ser aceptado."
-              )}
-            </p>
+            {language === "es" ? (
+              <p>
+                En linea con ediciones anteriores, los articulos aceptados se publicaran en las memorias
+                de la conferencia como parte de la serie LNCS de Springer. Los trabajos deben prepararse
+                siguiendo las{" "}
+                <a href="docs/Springer_Instructions_for_Authors_of_Proceedings_CS-2.pdf" target="_blank" rel="noopener noreferrer">
+                  guias para autores
+                </a>{" "}
+                de Springer y respetando el{" "}
+                <a href="docs/Publishers_Code_of_Conduct_for_Book_Authors.pdf" target="_blank" rel="noopener noreferrer">
+                  codigo de conducta editorial
+                </a>
+                . El envio implica que al menos un autor se compromete a registrarse y presentar el
+                trabajo en caso de ser aceptado.
+              </p>
+            ) : (
+              <p>
+                In line with previous editions, accepted papers will be published in the conference
+                proceedings as part of the Springer LNCS series. The papers should be prepared following
+                the{" "}
+                <a href="docs/Springer_Instructions_for_Authors_of_Proceedings_CS-2.pdf" target="_blank" rel="noopener noreferrer">
+                  authors&apos; guidelines
+                </a>{" "}
+                provided by Springer and adhering to the{" "}
+                <a href="docs/Publishers_Code_of_Conduct_for_Book_Authors.pdf" target="_blank" rel="noopener noreferrer">
+                  Code of Conduct of the Editorial
+                </a>
+                . Submission implies that at least one author is willing to register and present the
+                conference communication if it is accepted.
+              </p>
+            )}
           </section>
         </article>
       );
@@ -599,18 +624,60 @@ function HomeContent() {
 
     if (activeSection === "submission-guidelines") {
       return (
-        <ComingSoon
-          badge={tr("Working on it", "En preparacion")}
-          title={tr("Submission guidelines", "Lineamientos de envio")}
-          message={tr(
-            "The submission guidelines for MCPR 2027 are being prepared and will be published soon.",
-            "Los lineamientos de envio de MCPR 2027 se estan preparando y se publicaran proximamente."
+        <article className="surface page-block submission-guidelines-block">
+          <h2>{tr("Submission guidelines", "Lineamientos de envio")}</h2>
+          {language === "es" ? (
+            <>
+              <p>
+                Los articulos enviados a MCPR 2027 deben estar escritos en ingles y con formato de
+                acuerdo con los lineamientos de LNCS.
+              </p>
+              <p>
+                Los articulos deben enviarse electronicamente antes del 31 de enero de 2027 mediante el
+                sistema EasyChair. Los autores deben consultar las{" "}
+                <a href="docs/Springer_Instructions_for_Authors_of_Proceedings_CS-2.pdf" target="_blank" rel="noopener noreferrer">
+                  Instrucciones para Autores de Articulos a Publicarse en Springer Computer Science
+                  Proceedings
+                </a>{" "}
+                (plantillas para LaTeX o Word). Springer recomienda que los autores incluyan sus
+                identificadores ORCID. El autor de correspondencia debe completar y firmar un{" "}
+                <a href="docs/MCPR2027_SNCS_ProceedingsPaper_LTP_ST_SN_Switzerland.docx" download>
+                  formato de Consentimiento de Publicacion
+                </a>{" "}
+                y seguir el{" "}
+                <a href="docs/Publishers_Code_of_Conduct_for_Book_Authors.pdf" target="_blank" rel="noopener noreferrer">
+                  Codigo de Conducta Editorial
+                </a>
+                .
+              </p>
+            </>
+          ) : (
+            <>
+              <p>
+                Papers submitted to MCPR 2027 must be written in English and formatted in accordance with
+                LNCS guidelines.
+              </p>
+              <p>
+                Papers should be submitted electronically before January 31st, 2027 via the EasyChair
+                system. Authors should consult the{" "}
+                <a href="docs/Springer_Instructions_for_Authors_of_Proceedings_CS-2.pdf" target="_blank" rel="noopener noreferrer">
+                  Instructions for Authors of Papers to be Published in Springer Computer Science
+                  Proceedings
+                </a>{" "}
+                templates for LaTeX or Word. Springer encourages authors to include ORCID IDs. The
+                corresponding author must complete and sign a{" "}
+                <a href="docs/MCPR2027_SNCS_ProceedingsPaper_LTP_ST_SN_Switzerland.docx" download>
+                  Consent-to-Publish form
+                </a>{" "}
+                and follow the{" "}
+                <a href="docs/Publishers_Code_of_Conduct_for_Book_Authors.pdf" target="_blank" rel="noopener noreferrer">
+                  Editorial Code of Conduct
+                </a>
+                .
+              </p>
+            </>
           )}
-          note={tr(
-            "Questions? Write to mcpr2027@inaoep.mx",
-            "Dudas? Escribenos a mcpr2027@inaoep.mx"
-          )}
-        />
+        </article>
       );
     }
 
