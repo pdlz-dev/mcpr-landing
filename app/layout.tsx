@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Geist_Mono, Manrope } from "next/font/google";
+import { Geist_Mono, Manrope, Poppins } from "next/font/google";
 import "./globals.css";
 
-const displayFont = Bebas_Neue({
+const displayFont = Poppins({
   variable: "--font-display",
-  weight: "400",
+  weight: ["500", "600", "700"],
   subsets: ["latin"],
 });
 
